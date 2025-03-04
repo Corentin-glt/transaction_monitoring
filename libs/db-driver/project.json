@@ -1,0 +1,65 @@
+{
+  "name": "db-driver",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/db-driver/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/db-driver",
+        "main": "libs/db-driver/src/index.ts",
+        "tsConfig": "libs/db-driver/tsconfig.lib.json",
+        "assets": ["libs/db-driver/*.md"]
+      }
+    },
+    "gen-client": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "command": "npx prisma generate --schema ./src/prisma/schema.prisma",
+        "cwd": "libs/db-driver"
+      }
+    },
+    "migrate-dev": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "command": "npx prisma migrate dev --schema ./src/prisma/schema.prisma",
+        "cwd": "libs/db-driver"
+      }
+    },
+    "studio-up": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "command": "npx prisma studio --schema ./src/prisma/schema.prisma",
+        "cwd": "libs/db-driver"
+      }
+    },
+    "db-push": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "command": "npx prisma db push --schema ./src/prisma/schema.prisma",
+        "cwd": "libs/db-driver"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/db-driver/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/db-driver/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

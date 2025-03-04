@@ -5,7 +5,9 @@ import { TransactionsService } from './transactions.service';
 
 @Resolver(() => Transaction)
 export class TransactionsResolver {
-  constructor(private readonly transactionsService: TransactionsService) {}
+  constructor(
+    private readonly transactionsService: TransactionsService
+  ) {}
 
   @Query(() => Transaction, { name: 'getTransactions' })
   async getTransactionById(

@@ -6,4 +6,7 @@ const variables = {
 };
 
 export const configuration = () => variables;
-export type EnvironmentVariables = Record<keyof typeof variables, string>;
+export type EnvironmentVariables = Record<
+  keyof typeof variables,
+  string
+>;

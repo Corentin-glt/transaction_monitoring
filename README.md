@@ -9,13 +9,13 @@ This is the Transaction Monitoring repository, before to start please to follow 
 In order to use the project locally, we recommend to install the node LTS version.
 Please to install yarn.
 
-``` sh
+```sh
 npm install --global yarn
 ```
 
 Since the root directory please to install packages
 
-``` sh
+```sh
 yarn install
 ```
 
@@ -25,26 +25,26 @@ For the empty values, this is up to you.
 Now, we recommend to use [Docker](https://www.docker.com/products/docker-desktop/) on your machine.
 Then, please to launch the postgres DB by doing
 
-``` sh
+```sh
 docker compose up -d
 ```
 
 You're almost done. In order to use the schema client from Prisma, you have to generate the prisma schema by doing:
 
-``` sh
+```sh
 yarn generate:prisma
 ```
 
 then,
 
-``` sh
+```sh
 yarn migrate:prisma
 ```
 
 If it's your first time using this project, you can face to an error saying that Prisma can't create a shadow database while migrating the prisma DB.
 To resolve this please to run:
 
-``` sh
+```sh
 yarn dbpush:prisma
 ```
 

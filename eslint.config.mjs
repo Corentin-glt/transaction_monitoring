@@ -2,13 +2,17 @@ import nx from '@nx/eslint-plugin';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import _import from 'eslint-plugin-import';
 
-
 export default [
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
   {
-    ignores: ['**/node_modules', '**/dist', '**/public', '**/bin'],
+    ignores: [
+      '**/node_modules',
+      '**/dist',
+      '**/public',
+      '**/bin',
+    ],
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
@@ -17,7 +21,9 @@ export default [
         'error',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$'],
+          allow: [
+            '^.*/eslint(\\.base)?\\.config\\.[cm]?js$',
+          ],
           depConstraints: [
             {
               sourceTag: '*',

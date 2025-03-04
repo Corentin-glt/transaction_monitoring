@@ -436,7 +436,10 @@ export function NxWelcome({ title }: { title: string }) {
             </h1>
           </div>
 
-          <div id="hero" className="rounded">
+          <div
+            id="hero"
+            className="rounded"
+          >
             <div className="text-container">
               <h2>
                 <svg
@@ -470,7 +473,10 @@ export function NxWelcome({ title }: { title: string }) {
 
           <div id="middle-content">
             <div id="middle-content-container">
-              <div id="learning-materials" className="rounded shadow">
+              <div
+                id="learning-materials"
+                className="rounded shadow"
+              >
                 <h2>Learning materials</h2>
                 <a
                   href="https://nx.dev/getting-started/intro?utm_source=nx-project"
@@ -530,7 +536,10 @@ export function NxWelcome({ title }: { title: string }) {
                   </svg>
                   <span>
                     Blog
-                    <span> Changelog, features & events </span>
+                    <span>
+                      {' '}
+                      Changelog, features & events{' '}
+                    </span>
                   </span>
                   <svg
                     fill="none"
@@ -563,7 +572,10 @@ export function NxWelcome({ title }: { title: string }) {
                   </svg>
                   <span>
                     YouTube channel
-                    <span> Nx Show, talks & tutorials </span>
+                    <span>
+                      {' '}
+                      Nx Show, talks & tutorials{' '}
+                    </span>
                   </span>
                   <svg
                     fill="none"
@@ -600,7 +612,10 @@ export function NxWelcome({ title }: { title: string }) {
                   </svg>
                   <span>
                     Interactive tutorials
-                    <span> Create an app, step-by-step </span>
+                    <span>
+                      {' '}
+                      Create an app, step-by-step{' '}
+                    </span>
                   </span>
                   <svg
                     fill="none"
@@ -657,7 +672,9 @@ export function NxWelcome({ title }: { title: string }) {
                 </svg>
                 <span>
                   Install Nx Console for VSCode
-                  <span>The official VSCode extension for Nx.</span>
+                  <span>
+                    The official VSCode extension for Nx.
+                  </span>
                 </span>
               </a>
               <a
@@ -690,11 +707,15 @@ export function NxWelcome({ title }: { title: string }) {
                 <span>
                   Install Nx Console for JetBrains
                   <span>
-                    Available for WebStorm, Intellij IDEA Ultimate and more!
+                    Available for WebStorm, Intellij IDEA
+                    Ultimate and more!
                   </span>
                 </span>
               </a>
-              <div id="nx-cloud" className="rounded shadow">
+              <div
+                id="nx-cloud"
+                className="rounded shadow"
+              >
                 <div>
                   <svg
                     id="nx-cloud-logo"
@@ -715,12 +736,14 @@ export function NxWelcome({ title }: { title: string }) {
                   </svg>
                   <h2>
                     Nx Cloud
-                    <span>Enable faster CI & better DX</span>
+                    <span>
+                      Enable faster CI & better DX
+                    </span>
                   </h2>
                 </div>
                 <p>
-                  You can activate distributed tasks executions and caching by
-                  running:
+                  You can activate distributed tasks
+                  executions and caching by running:
                 </p>
                 <pre>nx connect</pre>
                 <a
@@ -735,7 +758,10 @@ export function NxWelcome({ title }: { title: string }) {
             </div>
           </div>
 
-          <div id="commands" className="rounded shadow">
+          <div
+            id="commands"
+            className="rounded shadow"
+          >
             <h2>Next steps</h2>
             <p>Here are some things you can do with Nx:</p>
             <details>

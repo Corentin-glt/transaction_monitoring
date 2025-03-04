@@ -16,7 +16,9 @@
     "noPropertyAccessFromIndexSignature": false,
     "baseUrl": ".",
     "paths": {
-      "@transaction-monitoring/core": ["libs/core/src/index.ts"],
+      "@transaction-monitoring/core": [
+        "libs/core/src/index.ts"
+      ],
       "@transaction-monitoring/server-interface": [
         "libs/server-interface/src/index.ts"
       ]

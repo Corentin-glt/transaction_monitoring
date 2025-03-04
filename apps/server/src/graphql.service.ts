@@ -9,9 +9,14 @@ import { GqlOptionsFactory } from '@nestjs/graphql';
 import { EnvironmentVariables } from '@transaction-monitoring/core';
 
 @Injectable()
-export class GraphQLModuleConfigService implements GqlOptionsFactory {
+export class GraphQLModuleConfigService
+  implements GqlOptionsFactory
+{
   constructor(
-    private readonly config: ConfigService<EnvironmentVariables, true>
+    private readonly config: ConfigService<
+      EnvironmentVariables,
+      true
+    >
   ) {}
   createGqlOptions(): ApolloDriverConfig {
     const environment = this.config.get('environment');

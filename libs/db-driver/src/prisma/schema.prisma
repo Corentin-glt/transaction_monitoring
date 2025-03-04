@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CurrencyEnum {
+  DOLLARS
+  EUROS
+}
+
+enum AlertStatusEnum {
+  ACTIVE
+  DONE
+}
+
+model Transaction {
+  id            String       @id @default(uuid())
+  sourceAccount String
+  targetAccount String
+  externalId    String
+  amount        Int
+  currency      CurrencyEnum @default(EUROS)
+  metadata      Json
+
+  transactionAlerts TransactionAlert[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model TransactionAlert {
+  id String @id @default(uuid())
+
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  alertId String
+  alert   Alert  @relation(fields: [alertId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@unique([transactionId, alertId])
+}
+
+model Alert {
+  id     String          @id @default(uuid())
+  status AlertStatusEnum @default(ACTIVE)
+
+  ruleId String
+  rule   Rule   @relation(fields: [ruleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  transactionAlerts TransactionAlert[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Rule {
+  id        String @id @default(uuid())
+  name      String
+  jsonLogic Json
+
+  alerts Alert[]
+
+  scenarioId String
+  scenario   Scenario @relation(fields: [scenarioId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Scenario {
+  id        String  @id @default(uuid())
+  name      String
+  isEnabled Boolean @default(true)
+
+  rules Rule[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
