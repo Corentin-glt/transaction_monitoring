@@ -25,7 +25,7 @@ export class GraphQLModuleConfigService
     return {
       autoSchemaFile: join(
         process.cwd(),
-        './apps/api/src/utils/generated/schema.gql'
+        './apps/server/src/utils/generated/schema.gql'
       ),
       sortSchema: true,
       // debug: environment !== 'PRODUCTION',
