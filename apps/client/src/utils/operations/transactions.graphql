@@ -1,0 +1,60 @@
+fragment transactionFragment on Transaction {
+  id
+  amount
+  currency
+  createdAt
+  externalId
+  metadata
+  sourceAccount
+  targetAccount
+}
+
+query GetTransactionById($getTransactionByIdId: ID!) {
+  getTransactionById(id: $getTransactionByIdId) {
+    ...transactionFragment
+  }
+}
+
+query TransactionsConnection(
+  $amount: Float
+  $currency: Currency
+  $externalIds: [String!]
+  $ids: [String!]
+  $sourceAccount: String
+  $targetAccount: String
+  $limit: Int
+  $offset: Int
+  $sorting: TransactionsConnectionSortingInput
+) {
+  transactionsConnection(
+    amount: $amount
+    currency: $currency
+    externalIds: $externalIds
+    ids: $ids
+    sourceAccount: $sourceAccount
+    targetAccount: $targetAccount
+  ) {
+    count
+    items(
+      limit: $limit
+      offset: $offset
+      sorting: $sorting
+    ) {
+      ...transactionFragment
+    }
+  }
+}
+
+mutation CreateTransactions($input: CreateTransactionsInput!) {
+  createTransactions(input: $input) {
+    success
+  }
+}
+
+mutation CreateTransaction(
+  $input: CreateTransactionInput!
+) {
+  createTransaction(input: $input) {
+    ...transactionFragment
+  }
+}

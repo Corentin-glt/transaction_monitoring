@@ -14,7 +14,12 @@ module.exports = {
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        badoit: '#2f4f4f',
+        'badoit-hover': '#2a4747',
+      }
+    },
   },
   plugins: [],
 };

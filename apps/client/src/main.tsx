@@ -1,7 +1,10 @@
+import { ApolloProvider } from '@apollo/client';
 import { StrictMode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';
+
+import client from './apolloClient';
 import App from './app/app';
+import ToastProvider from './utils/providers/toasts/toastProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -9,8 +12,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ToastProvider>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </ToastProvider>
   </StrictMode>
 );

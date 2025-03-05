@@ -1,0 +1,29 @@
+overwrite: true
+schema:
+  - 'apps/server/src/utils/generated/schema.gql'
+generates:
+  apps/server/src/utils/generated/schema.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+    config:
+      declarationKind: 'interface'
+    hooks:
+      afterOneFileWrite:
+        - eslint --fix
+        - prettier --write
+  apps/client/src/utils/generated/index.tsx:
+    hooks:
+      afterOneFileWrite:
+        - eslint --fix
+        - prettier --write
+    documents:
+      - 'apps/client/src/utils/operations/*.graphql'
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'
+    config:
+      withHooks: true
+      withComponent: false
+      withHOC: false

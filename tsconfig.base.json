@@ -27,6 +27,9 @@
       ],
       "@transaction-monitoring/db-driver": [
         "libs/db-driver/src/index.ts"
+      ],
+      "@transaction-monitoring/client-components": [
+        "libs/client-components/src/index.ts"
       ]
     }
   },
