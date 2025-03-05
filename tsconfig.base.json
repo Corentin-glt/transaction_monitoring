@@ -19,8 +19,14 @@
       "@transaction-monitoring/core": [
         "libs/core/src/index.ts"
       ],
-      "@transaction-monitoring/server-interface": [
-        "libs/server-interface/src/index.ts"
+      "@transaction-monitoring/graphql-interface": [
+        "libs/graphql-interface/src/index.ts"
+      ],
+      "@transaction-monitoring/interface": [
+        "libs/interface/src/index.ts"
+      ],
+      "@transaction-monitoring/db-driver": [
+        "libs/db-driver/src/index.ts"
       ]
     }
   },

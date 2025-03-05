@@ -3,7 +3,7 @@ import { ScenarioModel } from "./scenarios.model";
 export interface RuleModel {
   id: string;
   name: string;
-  jsonLogic: JSON;
+  jsonLogic: any;
 
   scenario: ScenarioModel;
   

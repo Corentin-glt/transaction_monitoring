@@ -1,9 +1,5 @@
 import { AlertModel } from './alerts.model';
-
-enum CurrencyEnum {
-  DOLLARS = 'DOLLARS',
-  EUROS = 'EUROS',
-}
+import { Currency } from '../enums/currency.enum';
 
 export interface TransactionModel {
   id: string;
@@ -11,8 +7,8 @@ export interface TransactionModel {
   targetAccount: string;
   externalId: string;
   amount: number;
-  currency: CurrencyEnum;
-  metadata: JSON;
+  currency: Currency;
+  metadata?: any;
 
   alerts?: AlertModel[];
 

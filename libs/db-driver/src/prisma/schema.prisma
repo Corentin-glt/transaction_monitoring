@@ -24,7 +24,7 @@ model Transaction {
   externalId    String
   amount        Int
   currency      CurrencyEnum @default(EUROS)
-  metadata      Json
+  metadata      Json?
 
   transactionAlerts TransactionAlert[]
 

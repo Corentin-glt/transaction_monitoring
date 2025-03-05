@@ -1,0 +1,69 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type BulkInsertTransaction {
+  success: Boolean!
+}
+
+input CreateTransactionInput {
+  amount: Float!
+  currency: Currency
+  externalId: String!
+  metadata: JSON
+  sourceAccount: String!
+  targetAccount: String!
+}
+
+input CreateTransactionsInput {
+  transactions: [CreateTransactionInput!]!
+}
+
+"""Currency custom scalar type"""
+scalar Currency
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type Mutation {
+  createTransaction(input: CreateTransactionInput!): Transaction!
+  createTransactions(input: CreateTransactionsInput!): BulkInsertTransaction!
+}
+
+type Query {
+  getTransactionById(id: ID!): Transaction!
+  transactionsConnection(amount: Float, currency: Currency, externalIds: [String!], ids: [String!], sourceAccount: String, targetAccount: String): TransactionsConnection!
+}
+
+enum SortingEnum {
+  asc
+  desc
+}
+
+type Transaction {
+  amount: Float!
+  createdAt: DateTime!
+  currency: Currency!
+  externalId: String!
+  id: ID!
+  metadata: JSON
+  sourceAccount: String!
+  targetAccount: String!
+}
+
+type TransactionsConnection {
+  count: Int!
+  items(limit: Int, offset: Int, sorting: TransactionsConnectionSortingInput): [Transaction!]!
+}
+
+input TransactionsConnectionSortingInput {
+  amount: SortingEnum
+  createdAt: SortingEnum
+}

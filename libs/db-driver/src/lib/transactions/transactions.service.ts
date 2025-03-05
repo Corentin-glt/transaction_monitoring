@@ -1,5 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Alert, Prisma, Transaction } from '@prisma/client';
+import {
+  Alert,
+  CurrencyEnum,
+  Prisma,
+  Transaction,
+} from '@prisma/client';
+import { chunk } from 'lodash';
 
 import {
   CreateEntityParams,
@@ -12,6 +18,11 @@ type SortingOptions =
 
 interface GetTransactionsParams {
   ids?: string[];
+  sourceAccount?: string;
+  targetAccount?: string;
+  externalIds?: string[];
+  amount?: number;
+  currency?: CurrencyEnum;
 }
 
 interface GetTransactionsOptions {
@@ -33,6 +44,10 @@ type UpdateTransactionParams = Omit<
   'transactionAlerts'
 >;
 
+export type TransactionEntity = Transaction;
+
+const CHUNK_SIZE = 500;
+
 @Injectable()
 export class TransactionsDbService {
   constructor(
@@ -44,6 +59,7 @@ export class TransactionsDbService {
   ): Prisma.TransactionWhereInput {
     return {
       id: { in: params.ids },
+      externalId: { in: params.externalIds },
     };
   }
 
@@ -77,6 +93,59 @@ export class TransactionsDbService {
         },
       },
     });
+  }
+
+  async bulkInsertTransactions(
+    data: CreateTransactionParams[]
+  ): Promise<{ success: true }> {
+    // Divides the transactions into manageable chunks
+    // to prevent overwhelming the database with large inserts.
+    const transactionDataChunks = chunk(data, CHUNK_SIZE);
+
+    try {
+      // Ensures that both the insertion of transactions
+      // and their associated alerts are generated.
+      await this.prismaService.$transaction(
+        async (prisma) => {
+          for (const batch of transactionDataChunks) {
+            const insertedTransactions =
+              await this.prismaService.transaction.createManyAndReturn(
+                {
+                  data: batch.map(
+                    ({ alertIds, ...data }) => data
+                  ),
+                }
+              );
+
+            // Associates each transaction with its corresponding alertIds
+            // to create the transactionAlert entries.
+            const transactionAlerts =
+              insertedTransactions.flatMap(
+                (transaction, index) => {
+                  const alertIds =
+                    batch[index].alertIds || [];
+
+                  return alertIds.map((alertId) => ({
+                    transactionId: transaction.id,
+                    alertId,
+                  }));
+                }
+              );
+
+            if (transactionAlerts.length > 0) {
+              await prisma.transactionAlert.createMany({
+                data: transactionAlerts,
+              });
+            }
+          }
+        }
+      );
+
+      return { success: true };
+    } catch (error) {
+      console.error('Bulk insert failed:', error);
+      throw new Error('Bulk insert failed');
+    }
   }
 
   async updateTransaction(
