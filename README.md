@@ -1,6 +1,10 @@
 # Transaction Monitoring app 🚀
 
-This is the Transaction Monitoring repository, before to start please to follow these steps.
+This is the Transaction Monitoring repository.
+
+> A Transaction Monitoring System (TMS) is a solution used by financial institutions and businesses to track, analyze, and detect potentially suspicious transactions in real-time or retrospectively. It helps ensure compliance with regulatory requirements, such as anti-money laundering (AML) and fraud prevention, by identifying patterns, anomalies, or behaviors that deviate from expected norms. TMS often leverages rules, machine learning, and risk-based approaches to automate monitoring and generate alerts for further investigation.
+
+Before to start please to follow the below steps 👇.
 
 ---
 
