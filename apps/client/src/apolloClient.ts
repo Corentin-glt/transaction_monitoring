@@ -125,12 +125,37 @@ const client = new ApolloClient({
         },
       },
 
+      RulesConnection: {
+        fields: {
+          items: {
+            ...offsetPagination(),
+            read(existing, { args }) {
+              if (!args) return existing;
+              const offset = args.offset || 0;
+              const limit = args.limit || existing?.length;
+
+              return (
+                existing &&
+                existing.slice(offset, offset + limit)
+              );
+            },
+          },
+        },
+      },
+
       Query: {
         fields: {
           transaction(_, { args, toReference }) {
             if (!args) return null;
             return toReference({
               __typename: 'Transaction',
+              id: args.id,
+            });
+          },
+          rule(_, { args, toReference }) {
+            if (!args) return null;
+            return toReference({
+              __typename: 'Rule',
               id: args.id,
             });
           },

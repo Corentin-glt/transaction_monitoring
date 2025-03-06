@@ -3,6 +3,10 @@ fragment ruleFragment on Rule {
   name
   jsonLogic
   createdAt
+  scenarios {
+    id
+    name
+  }
 }
 
 query Rule($ruleId: ID!) {
@@ -11,10 +15,20 @@ query Rule($ruleId: ID!) {
   }
 }
 
-query RulesConnection($ids: [ID!], $name: String) {
+query RulesConnection(
+  $ids: [ID!]
+  $name: String
+  $limit: Int
+  $offset: Int
+  $sorting: RulesConnectionSortingInput
+) {
   rulesConnection(ids: $ids, name: $name) {
     count
-    items {
+    items(
+      limit: $limit
+      offset: $offset
+      sorting: $sorting
+    ) {
       ...ruleFragment
     }
   }

@@ -1,7 +1,4 @@
-import {
-  Fieldset,
-  Legend,
-} from '@transaction-monitoring/client-components';
+import { Text } from '@transaction-monitoring/client-components';
 import {
   FunctionComponent,
   useCallback,
@@ -27,7 +24,6 @@ const TransactionPage: FunctionComponent = function () {
           createdAt: SortingEnum.Desc,
         },
       },
-      // fetchPolicy: 'network-only',
     });
 
   const handlePageUpdate = useCallback(
@@ -55,10 +51,8 @@ const TransactionPage: FunctionComponent = function () {
 
   if (total === 0) {
     return (
-      <div className="flex-1 flex flex-col justify-center items-center gap-y-8">
-        <span className="font-semibold">
-          No transactions exisiting yet
-        </span>
+      <div className="flex-1 flex flex-col justify-center items-center gap-y-8 min-h-svh">
+        <Text>No transactions exisiting yet</Text>
       </div>
     );
   }

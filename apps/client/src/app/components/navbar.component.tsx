@@ -1,4 +1,7 @@
-import { Bars3BottomRightIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
+import {
+  Bars3BottomRightIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/24/solid';
 import {
   Dropdown,
   DropdownButton,
@@ -83,13 +86,22 @@ const NavbarComponent: FunctionComponent = function () {
       <NavbarSpacer />
       <Dropdown>
         <DropdownButton as={NavbarItem}>
-          <Bars3BottomRightIcon className='w-5 h-5'/>
+          <Bars3BottomRightIcon className="w-5 h-5" />
         </DropdownButton>
-        <DropdownMenu className="min-w-64" anchor="bottom start">
-          <DropdownItem onClick={() => navigate('/addTransactions')}>
-            <DropdownLabel>Submit transactions</DropdownLabel>
+        <DropdownMenu
+          className="min-w-64"
+          anchor="bottom start"
+        >
+          <DropdownItem
+            onClick={() => navigate('/addTransactions')}
+          >
+            <DropdownLabel>Bulk transactions</DropdownLabel>
           </DropdownItem>
-          
+          <DropdownItem
+            onClick={() => navigate('/addRule')}
+          >
+            <DropdownLabel>Create a new rule</DropdownLabel>
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </Navbar>

@@ -6,6 +6,7 @@ import {
 import {
   removeDuplicates,
   RuleModel,
+  ScenarioModel,
   Sorting,
 } from '@transaction-monitoring/interface';
 
@@ -84,5 +85,11 @@ export class RulesService {
 
   async countRules(params: FindRulesParams) {
     return this.rulesDbService.getCountRules(params);
+  }
+
+  async getRuleScenarios(
+    id: string
+  ): Promise<ScenarioModel[]> {
+    return this.rulesDbService.getRuleScenarios(id);
   }
 }

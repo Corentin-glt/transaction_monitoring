@@ -124,6 +124,7 @@ export interface Rule {
   id: Scalars['ID']['output'];
   jsonLogic: Scalars['JSON']['output'];
   name: Scalars['String']['output'];
+  scenarios?: Maybe<Array<Scenario>>;
 }
 
 export interface RulesConnection {
@@ -140,6 +141,12 @@ export interface RulesConnectionItemsArgs {
 
 export interface RulesConnectionSortingInput {
   createdAt?: InputMaybe<SortingEnum>;
+}
+
+export interface Scenario {
+  __typename?: 'Scenario';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 }
 
 export enum SortingEnum {

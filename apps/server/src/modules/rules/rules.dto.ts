@@ -6,16 +6,21 @@ import {
   Int,
   ObjectType,
 } from '@nestjs/graphql';
-import {
-  CurrencyScalar,
-  SortingEnum,
-} from '@transaction-monitoring/graphql-interface';
-import {
-  Currency,
-  Sorting,
-} from '@transaction-monitoring/interface';
+import { SortingEnum } from '@transaction-monitoring/graphql-interface';
+import { Sorting } from '@transaction-monitoring/interface';
 import { IsNumber, Min } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
+
+//TODO: Copy/Paste this object type
+// once scenario's going to have its resolvers
+@ObjectType()
+export class Scenario {
+  @Field(() => ID)
+  public id: string;
+
+  @Field(() => String)
+  name: string;
+}
 
 @ObjectType()
 export class Rule {
@@ -25,9 +30,8 @@ export class Rule {
   @Field(() => String)
   public name: string;
 
-  //TODO: uncomment when scenario graph will be available
-  // @Field(() => [Scenario])
-  // public scenario: Scenario[]
+  @Field(() => [Scenario], { nullable: true })
+  public scenarios?: Scenario[];
 
   @Field(() => GraphQLJSON)
   public jsonLogic: any;

@@ -9,7 +9,7 @@ import CreateTransactionsForm from '../components/forms/createTransactionsForm.c
 const AddTransactionsPage: FunctionComponent = function () {
   const toast = useToast();
   const navigate = useNavigate();
-  const [createWorksite, { loading }] =
+  const [createTransactions, { loading }] =
     useCreateTransactionsMutation({
       onCompleted() {
         toast.open({
@@ -25,7 +25,7 @@ const AddTransactionsPage: FunctionComponent = function () {
     <div>
       <CreateTransactionsForm
         onSubmit={(data) =>
-          createWorksite({
+          createTransactions({
             variables: {
               input: {
                 ...data,

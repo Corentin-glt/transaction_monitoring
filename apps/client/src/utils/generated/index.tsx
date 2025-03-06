@@ -127,6 +127,7 @@ export type Rule = {
   id: Scalars['ID']['output'];
   jsonLogic: Scalars['JSON']['output'];
   name: Scalars['String']['output'];
+  scenarios?: Maybe<Array<Scenario>>;
 };
 
 export type RulesConnection = {
@@ -143,6 +144,12 @@ export type RulesConnectionItemsArgs = {
 
 export type RulesConnectionSortingInput = {
   createdAt?: InputMaybe<SortingEnum>;
+};
+
+export type Scenario = {
+  __typename?: 'Scenario';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export enum SortingEnum {
@@ -192,6 +199,11 @@ export type RuleFragmentFragment = {
   name: string;
   jsonLogic: any;
   createdAt: any;
+  scenarios?: Array<{
+    __typename?: 'Scenario';
+    id: string;
+    name: string;
+  }> | null;
 };
 
 export type RuleQueryVariables = Exact<{
@@ -206,6 +218,11 @@ export type RuleQuery = {
     name: string;
     jsonLogic: any;
     createdAt: any;
+    scenarios?: Array<{
+      __typename?: 'Scenario';
+      id: string;
+      name: string;
+    }> | null;
   };
 };
 
@@ -214,6 +231,9 @@ export type RulesConnectionQueryVariables = Exact<{
     Array<Scalars['ID']['input']> | Scalars['ID']['input']
   >;
   name?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<RulesConnectionSortingInput>;
 }>;
 
 export type RulesConnectionQuery = {
@@ -227,6 +247,11 @@ export type RulesConnectionQuery = {
       name: string;
       jsonLogic: any;
       createdAt: any;
+      scenarios?: Array<{
+        __typename?: 'Scenario';
+        id: string;
+        name: string;
+      }> | null;
     }>;
   };
 };
@@ -243,6 +268,11 @@ export type CreateRuleMutation = {
     name: string;
     jsonLogic: any;
     createdAt: any;
+    scenarios?: Array<{
+      __typename?: 'Scenario';
+      id: string;
+      name: string;
+    }> | null;
   };
 };
 
@@ -259,6 +289,11 @@ export type UpdateRuleMutation = {
     name: string;
     jsonLogic: any;
     createdAt: any;
+    scenarios?: Array<{
+      __typename?: 'Scenario';
+      id: string;
+      name: string;
+    }> | null;
   };
 };
 
@@ -367,6 +402,10 @@ export const RuleFragmentFragmentDoc = gql`
     name
     jsonLogic
     createdAt
+    scenarios {
+      id
+      name
+    }
   }
 `;
 export const TransactionFragmentFragmentDoc = gql`
@@ -465,10 +504,20 @@ export type RuleQueryResult = Apollo.QueryResult<
   RuleQueryVariables
 >;
 export const RulesConnectionDocument = gql`
-  query RulesConnection($ids: [ID!], $name: String) {
+  query RulesConnection(
+    $ids: [ID!]
+    $name: String
+    $limit: Int
+    $offset: Int
+    $sorting: RulesConnectionSortingInput
+  ) {
     rulesConnection(ids: $ids, name: $name) {
       count
-      items {
+      items(
+        limit: $limit
+        offset: $offset
+        sorting: $sorting
+      ) {
         ...ruleFragment
       }
     }
@@ -490,6 +539,9 @@ export const RulesConnectionDocument = gql`
  *   variables: {
  *      ids: // value for 'ids'
  *      name: // value for 'name'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sorting: // value for 'sorting'
  *   },
  * });
  */

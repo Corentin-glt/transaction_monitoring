@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom';
 
 import AppLayout from './layouts/app.layout';
+import AddRulePage from './pages/AddRule.page';
 import AddTransactionsPage from './pages/addTransactions.page';
 import AlertsPage from './pages/alerts.page';
 import RulesPage from './pages/rules.page';
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: '/addTransactions',
         element: <AddTransactionsPage />,
+      },
+      {
+        path: '/addRule',
+        element: <AddRulePage />,
       },
     ],
   },

@@ -14,6 +14,7 @@ import {
   RulesConnection,
   RulesConnectionArgs,
   RulesConnectionItemsArgs,
+  Scenario,
   UpdateRuleInput,
 } from './rules.dto';
 import { RulesService } from './rules.service';
@@ -54,7 +55,12 @@ export class RulesResolver {
     return this.rulesService.updateRule(id, input);
   }
 
-  //TODO: ResolveField of scenarios when it wll be available
+  @ResolveField('scenarios')
+  async scenarios(
+    @Parent() parent: Rule
+  ): Promise<Scenario[]> {
+    return this.rulesService.getRuleScenarios(parent.id);
+  }
 }
 
 @Resolver(RulesConnection)
