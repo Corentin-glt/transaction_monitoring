@@ -26,7 +26,7 @@ export class TransactionsResolver {
   ) {}
 
   @Query(() => Transaction)
-  async getTransactionById(
+  async transaction(
     @Args('id', { type: () => ID }) id: string
   ): Promise<Transaction> {
     return this.transactionsService.getTransactionById(id);

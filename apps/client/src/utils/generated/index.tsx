@@ -75,11 +75,11 @@ export type MutationCreateTransactionsArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  getTransactionById: Transaction;
+  transaction: Transaction;
   transactionsConnection: TransactionsConnection;
 };
 
-export type QueryGetTransactionByIdArgs = {
+export type QueryTransactionArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -140,13 +140,13 @@ export type TransactionFragmentFragment = {
   targetAccount: string;
 };
 
-export type GetTransactionByIdQueryVariables = Exact<{
+export type TransactionQueryVariables = Exact<{
   getTransactionByIdId: Scalars['ID']['input'];
 }>;
 
-export type GetTransactionByIdQuery = {
+export type TransactionQuery = {
   __typename?: 'Query';
-  getTransactionById: {
+  transaction: {
     __typename?: 'Transaction';
     id: string;
     amount: number;
@@ -239,9 +239,9 @@ export const TransactionFragmentFragmentDoc = gql`
     targetAccount
   }
 `;
-export const GetTransactionByIdDocument = gql`
-  query GetTransactionById($getTransactionByIdId: ID!) {
-    getTransactionById(id: $getTransactionByIdId) {
+export const TransactionDocument = gql`
+  query Transaction($getTransactionByIdId: ID!) {
+    transaction(id: $getTransactionByIdId) {
       ...transactionFragment
     }
   }
@@ -249,29 +249,29 @@ export const GetTransactionByIdDocument = gql`
 `;
 
 /**
- * __useGetTransactionByIdQuery__
+ * __useTransactionQuery__
  *
- * To run a query within a React component, call `useGetTransactionByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTransactionByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTransactionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransactionQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetTransactionByIdQuery({
+ * const { data, loading, error } = useTransactionQuery({
  *   variables: {
  *      getTransactionByIdId: // value for 'getTransactionByIdId'
  *   },
  * });
  */
-export function useGetTransactionByIdQuery(
+export function useTransactionQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetTransactionByIdQuery,
-    GetTransactionByIdQueryVariables
+    TransactionQuery,
+    TransactionQueryVariables
   > &
     (
       | {
-          variables: GetTransactionByIdQueryVariables;
+          variables: TransactionQueryVariables;
           skip?: boolean;
         }
       | { skip: boolean }
@@ -279,28 +279,28 @@ export function useGetTransactionByIdQuery(
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetTransactionByIdQuery,
-    GetTransactionByIdQueryVariables
-  >(GetTransactionByIdDocument, options);
+    TransactionQuery,
+    TransactionQueryVariables
+  >(TransactionDocument, options);
 }
-export function useGetTransactionByIdLazyQuery(
+export function useTransactionLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetTransactionByIdQuery,
-    GetTransactionByIdQueryVariables
+    TransactionQuery,
+    TransactionQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetTransactionByIdQuery,
-    GetTransactionByIdQueryVariables
-  >(GetTransactionByIdDocument, options);
+    TransactionQuery,
+    TransactionQueryVariables
+  >(TransactionDocument, options);
 }
-export function useGetTransactionByIdSuspenseQuery(
+export function useTransactionSuspenseQuery(
   baseOptions?:
     | Apollo.SkipToken
     | Apollo.SuspenseQueryHookOptions<
-        GetTransactionByIdQuery,
-        GetTransactionByIdQueryVariables
+        TransactionQuery,
+        TransactionQueryVariables
       >
 ) {
   const options =
@@ -308,22 +308,23 @@ export function useGetTransactionByIdSuspenseQuery(
       ? baseOptions
       : { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<
-    GetTransactionByIdQuery,
-    GetTransactionByIdQueryVariables
-  >(GetTransactionByIdDocument, options);
+    TransactionQuery,
+    TransactionQueryVariables
+  >(TransactionDocument, options);
 }
-export type GetTransactionByIdQueryHookResult = ReturnType<
-  typeof useGetTransactionByIdQuery
+export type TransactionQueryHookResult = ReturnType<
+  typeof useTransactionQuery
 >;
-export type GetTransactionByIdLazyQueryHookResult =
-  ReturnType<typeof useGetTransactionByIdLazyQuery>;
-export type GetTransactionByIdSuspenseQueryHookResult =
-  ReturnType<typeof useGetTransactionByIdSuspenseQuery>;
-export type GetTransactionByIdQueryResult =
-  Apollo.QueryResult<
-    GetTransactionByIdQuery,
-    GetTransactionByIdQueryVariables
-  >;
+export type TransactionLazyQueryHookResult = ReturnType<
+  typeof useTransactionLazyQuery
+>;
+export type TransactionSuspenseQueryHookResult = ReturnType<
+  typeof useTransactionSuspenseQuery
+>;
+export type TransactionQueryResult = Apollo.QueryResult<
+  TransactionQuery,
+  TransactionQueryVariables
+>;
 export const TransactionsConnectionDocument = gql`
   query TransactionsConnection(
     $amount: Float

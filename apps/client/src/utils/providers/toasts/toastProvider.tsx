@@ -56,20 +56,20 @@ const ToastProvider: FunctionComponent<React.PropsWithChildren> =
               </button>
 
               {intent === ToastIntent.ERROR ? (
-                <div
-                  role="alert"
-                  className="alert alert-error"
-                >
+                <div className="flex gap-2 bg-red-400 text-red-800 p-4 rounded-6 shadow-md">
                   <ExclamationCircleIcon className="h-6 w-6" />
-                  <span>{message}</span>
+                  <div className="flex flex-col">
+                    <h3 className="font-bold">{title}</h3>
+                    <p className="text-sm">{message}</p>
+                  </div>
                 </div>
               ) : (
-                <div
-                  role="alert"
-                  className="alert alert-success"
-                >
+                <div className="flex gap-2 bg-palette-4 text-white p-4 rounded-6 shadow-md">
                   <CheckBadgeIcon className="h-6 w-6" />
-                  <span>{message}</span>
+                  <div className="flex flex-col">
+                    <h3 className="font-bold">{title}</h3>
+                    <p className="text-sm">{message}</p>
+                  </div>
                 </div>
               )}
             </div>

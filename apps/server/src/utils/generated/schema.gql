@@ -38,7 +38,7 @@ type Mutation {
 }
 
 type Query {
-  getTransactionById(id: ID!): Transaction!
+  transaction(id: ID!): Transaction!
   transactionsConnection(amount: Float, currency: Currency, externalIds: [String!], ids: [String!], sourceAccount: String, targetAccount: String): TransactionsConnection!
 }
 

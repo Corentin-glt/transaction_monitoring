@@ -16,12 +16,17 @@ import {
 import InputField, {
   InputFieldProps,
 } from './inputField.component';
+import SelectFieldComponent, {
+  Option,
+} from '../selects/selectField.component';
 
 interface InputField
   extends Omit<InputFieldProps, 'name' | 'register'> {
   key: string;
   defaultValue: string | number;
-  isPercent?: boolean;
+  select?: {
+    options: Option[];
+  };
 }
 
 interface ListInputFieldProps {
@@ -64,22 +69,42 @@ const ListInputField: FunctionComponent<ListInputFieldProps> =
             className="flex gap-x-6"
             key={field.id}
           >
-            {inputFields.map((input) => (
-              <InputField
-                {...input}
-                key={`${field.id}-${input.key}`}
-                name={`${name}.${index}.${input.key}`}
-                error={
-                  errors &&
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  //@ts-ignore
-                  (errors?.[name]?.[index]?.[
-                    input.key
-                  ] as FieldError)
-                }
-                register={register}
-              />
-            ))}
+            {inputFields.map((input) => {
+              if (input.select) {
+                return (
+                  <SelectFieldComponent
+                    {...input}
+                    name={`${name}.${index}.${input.key}`}
+                    options={input.select.options}
+                    register={register}
+                    error={
+                      errors &&
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      //@ts-ignore
+                      (errors?.[name]?.[index]?.[
+                        input.key
+                      ] as FieldError)
+                    }
+                  />
+                );
+              }
+              return (
+                <InputField
+                  {...input}
+                  key={`${field.id}-${input.key}`}
+                  name={`${name}.${index}.${input.key}`}
+                  error={
+                    errors &&
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    //@ts-ignore
+                    (errors?.[name]?.[index]?.[
+                      input.key
+                    ] as FieldError)
+                  }
+                  register={register}
+                />
+              );
+            })}
             {!field.removeDeleteButton && (
               <div className="pt-9">
                 <Button

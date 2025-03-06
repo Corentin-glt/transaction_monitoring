@@ -5,19 +5,16 @@ import {
   Legend,
   Text,
 } from '@transaction-monitoring/client-components';
-import { CurrencyValues } from '@transaction-monitoring/interface';
+import {
+  Currency,
+  CurrencyValues,
+} from '@transaction-monitoring/interface';
 import { FunctionComponent } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { useCreateTransactionsMutation } from '../../../utils/generated';
-import { ToastIntent } from '../../../utils/providers/toasts/toastProvider';
-import { useToast } from '../../../utils/providers/toasts/toastService';
+import { displayCurrencyType } from '../../../utils/displayCurrency';
 import ListInputField from '../inputs/listInputField.component';
-
-interface CreateTransactionsFormProps {
-  onSubmit?: () => void;
-}
 
 const schema = yup
   .object({
@@ -33,6 +30,7 @@ const schema = yup
           targetAccount: yup.string().required(),
         })
       )
+      .min(1, 'Please to provide at least one transaction')
       .required(),
   })
   .required();
@@ -41,9 +39,14 @@ type ICreateTransactionsInputs = yup.InferType<
   typeof schema
 >;
 
+interface CreateTransactionsFormProps {
+  onSubmit: (
+    data: ICreateTransactionsInputs
+  ) => Promise<any>;
+}
+
 const CreateTransactionsForm: FunctionComponent<CreateTransactionsFormProps> =
   function ({ onSubmit }) {
-    const toast = useToast();
     const {
       control,
       handleSubmit,
@@ -55,29 +58,11 @@ const CreateTransactionsForm: FunctionComponent<CreateTransactionsFormProps> =
       resolver: yupResolver(schema),
     });
 
-    const [createWorksite, { loading }] =
-      useCreateTransactionsMutation({
-        onCompleted() {
-          toast.open({
-            intent: ToastIntent.SUCCESS,
-            title: 'Transactions Bulk done with success',
-          });
-          onSubmit && onSubmit();
-          reset();
-        },
-      });
-
     return (
       <form
-        className=""
-        onSubmit={handleSubmit((data) => {
-          createWorksite({
-            variables: {
-              input: {
-                ...data,
-              },
-            },
-          });
+        onSubmit={handleSubmit(async (data) => {
+          await onSubmit(data);
+          reset();
         })}
       >
         <Fieldset className="mb-4">
@@ -90,7 +75,7 @@ const CreateTransactionsForm: FunctionComponent<CreateTransactionsFormProps> =
             control={control}
             register={register}
             watch={watch}
-            name="groups"
+            name="transactions"
             errors={errors}
             inputFields={[
               {
@@ -116,23 +101,34 @@ const CreateTransactionsForm: FunctionComponent<CreateTransactionsFormProps> =
               {
                 key: 'targetAccount',
                 defaultValue: '',
-                placeholder: 'Source Account',
-                label: 'Source Account',
+                placeholder: 'Target Account',
+                label: 'Target Account',
                 required: true,
               },
-              // {
-              //   key: 'targetAccount',
-              //   defaultValue: '',
-              //   placeholder: 'Source Account',
-              //   label: 'Source Account',
-              //   required: true,
-              // },
+              {
+                key: 'currency',
+                defaultValue: CurrencyValues.EUROS,
+                placeholder: 'currency',
+                label: 'Currency',
+                select: {
+                  options: Object.values(
+                    CurrencyValues
+                  ).map((type) => {
+                    const { label, symbol } =
+                      displayCurrencyType(type as Currency);
+                    return {
+                      value: type,
+                      label: `${label} - ${symbol}`,
+                    };
+                  }),
+                },
+              },
             ]}
             labelAddButton="+ Add transaction"
           />
         </Fieldset>
         <Button
-          className="p-2"
+          className="p-2 hover:cursor-pointer disabled:cursor-default disabled:opacity-50"
           type="submit"
           disabled={!isValid}
         >

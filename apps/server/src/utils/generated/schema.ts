@@ -72,11 +72,11 @@ export interface MutationCreateTransactionsArgs {
 
 export interface Query {
   __typename?: 'Query';
-  getTransactionById: Transaction;
+  transaction: Transaction;
   transactionsConnection: TransactionsConnection;
 }
 
-export interface QueryGetTransactionByIdArgs {
+export interface QueryTransactionArgs {
   id: Scalars['ID']['input'];
 }
 

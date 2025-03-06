@@ -1,4 +1,8 @@
 import {
+  Fieldset,
+  Legend,
+} from '@transaction-monitoring/client-components';
+import {
   FunctionComponent,
   useCallback,
   useState,
@@ -23,6 +27,7 @@ const TransactionPage: FunctionComponent = function () {
           createdAt: SortingEnum.Desc,
         },
       },
+      // fetchPolicy: 'network-only',
     });
 
   const handlePageUpdate = useCallback(
@@ -64,6 +69,11 @@ const TransactionPage: FunctionComponent = function () {
       limit={limit}
       onUpdatePage={handlePageUpdate}
     >
+      <div className="flex w-full justify-end mb-8">
+        <span className="dark:text-zinc-200">
+          Total transactions: {total}
+        </span>
+      </div>
       <TransactionsTableComponent
         transactions={transactions}
       />

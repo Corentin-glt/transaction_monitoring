@@ -8,6 +8,7 @@ import {
 } from '@transaction-monitoring/client-components';
 import { FunctionComponent } from 'react';
 
+import { displayCurrencyType } from '../../../utils/displayCurrency';
 import { Transaction } from '../../../utils/generated';
 
 interface TransactionsTableComponentProps {
@@ -26,9 +27,7 @@ const TransactionsTableComponent: FunctionComponent<TransactionsTableComponentPr
             <TableHeader>Source Account</TableHeader>
             <TableHeader>Target Account</TableHeader>
             <TableHeader>External Id</TableHeader>
-            <TableHeader>
-              Creation date
-            </TableHeader>
+            <TableHeader>Creation date</TableHeader>
             <TableHeader className="text-right">
               Currency
             </TableHeader>
@@ -38,34 +37,40 @@ const TransactionsTableComponent: FunctionComponent<TransactionsTableComponentPr
           </TableRow>
         </TableHead>
         <TableBody>
-          {transactions.map((transaction) => (
-            <TableRow key={transaction.id}>
-              <TableCell className="font-medium">
-                {transaction.sourceAccount}
-              </TableCell>
-              <TableCell className="font-medium">
-                {transaction.targetAccount}
-              </TableCell>
-              <TableCell>
-                {transaction.externalId}
-              </TableCell>
-              <TableCell className="text-sm">
-                {new Date(
-                  transaction.createdAt
-                ).toLocaleDateString('en-GB', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })}
-              </TableCell>
-              <TableCell className="text-right tabular-nums">
-                {transaction.currency}
-              </TableCell>
-              <TableCell className="text-right tabular-nums">
-                {transaction.amount}
-              </TableCell>
-            </TableRow>
-          ))}
+          {transactions.map((transaction) => {
+            const { label, symbol } = displayCurrencyType(
+              transaction.currency
+            );
+            return (
+              <TableRow key={transaction.id}>
+                <TableCell className="font-medium">
+                  {transaction.sourceAccount}
+                </TableCell>
+                <TableCell className="font-medium">
+                  {transaction.targetAccount}
+                </TableCell>
+                <TableCell>
+                  {transaction.externalId}
+                </TableCell>
+                <TableCell className="text-sm">
+                  {new Date(
+                    transaction.createdAt
+                  ).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
+                </TableCell>
+                <TableCell className="text-right tabular-nums">
+                  {label}
+                </TableCell>
+                <TableCell className="text-right tabular-nums">
+                  {transaction.amount + ' '}
+                  {symbol}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     );

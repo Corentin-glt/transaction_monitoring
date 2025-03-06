@@ -9,8 +9,8 @@ fragment transactionFragment on Transaction {
   targetAccount
 }
 
-query GetTransactionById($getTransactionByIdId: ID!) {
-  getTransactionById(id: $getTransactionByIdId) {
+query Transaction($getTransactionByIdId: ID!) {
+  transaction(id: $getTransactionByIdId) {
     ...transactionFragment
   }
 }
@@ -45,7 +45,9 @@ query TransactionsConnection(
   }
 }
 
-mutation CreateTransactions($input: CreateTransactionsInput!) {
+mutation CreateTransactions(
+  $input: CreateTransactionsInput!
+) {
   createTransactions(input: $input) {
     success
   }

@@ -13,7 +13,8 @@ import {
   UseFormRegister,
 } from 'react-hook-form';
 
-export interface InputFieldProps extends InputHTMLAttributes<any> {
+export interface InputFieldProps
+  extends InputHTMLAttributes<any> {
   label?: string;
   error?: FieldError;
   name: string;
