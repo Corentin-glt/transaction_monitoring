@@ -1,12 +1,12 @@
-import { ScenarioModel } from "./scenarios.model";
+import { ScenarioModel } from './scenarios.model';
 
 export interface RuleModel {
   id: string;
   name: string;
   jsonLogic: any;
 
-  scenario: ScenarioModel;
-  
+  scenarios?: ScenarioModel[];
+
   createdAt: Date;
   updatedAt?: Date;
 }

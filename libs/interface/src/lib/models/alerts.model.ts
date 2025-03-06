@@ -1,4 +1,4 @@
-import { RuleModel } from './rules.model';
+import { ScenarioModel } from './scenarios.model';
 import { TransactionModel } from './transactions.model';
 
 enum AlertStatus {
@@ -10,7 +10,7 @@ export interface AlertModel {
   id: string;
   status: AlertStatus;
 
-  rule: RuleModel;
+  scenario: ScenarioModel;
   transations?: TransactionModel[];
 
   createdAt: Date;

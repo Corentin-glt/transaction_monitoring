@@ -3,6 +3,7 @@ import {
   Alert,
   Prisma,
   Rule,
+  Scenario,
   Transaction,
 } from '@prisma/client';
 
@@ -21,7 +22,7 @@ interface GetAlertsOptions {
 }
 
 interface CreateAlertParams {
-  ruleId: string;
+  scenarioId: string;
   transactionId: string;
 }
 
@@ -59,9 +60,9 @@ export class AlertsDbService {
             transactionId: data.transactionId,
           },
         },
-        rule: {
+        scenario: {
           connect: {
-            id: data.ruleId,
+            id: data.scenarioId,
           },
         },
       },
@@ -120,17 +121,17 @@ export class AlertsDbService {
     return alertAlerts.map((t) => t.transaction);
   }
 
-  async getAlertRule(id: string): Promise<Rule> {
-    const rule = await this.prismaService.alert
+  async getAlertRule(id: string): Promise<Scenario> {
+    const scenario = await this.prismaService.alert
       .findUnique({ where: { id } })
-      .rule();
+      .scenario();
 
-    if (!rule) {
+    if (!scenario) {
       throw new Error(
         'Impossible to find the Rule attached to this Alert'
       );
     }
 
-    return rule;
+    return scenario;
   }
 }

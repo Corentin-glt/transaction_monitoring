@@ -9,6 +9,7 @@ import {
 import {
   CreateEntityParams,
   PrismaService,
+  UpdateEntityParams,
 } from '../prisma.service';
 
 type SortingOptions = Prisma.RuleOrderByWithRelationInput;
@@ -28,7 +29,15 @@ interface CreateRuleParams
     CreateEntityParams<Prisma.RuleCreateInput>,
     'alerts' | 'scenario'
   > {
-  scenarioId: string;
+  scenarioId?: string;
+}
+
+interface UpdateRuleParams
+  extends Omit<
+    UpdateEntityParams<Prisma.RuleUpdateInput>,
+    'jsonLogic' | ''
+  > {
+  scenarioIds: string[];
 }
 
 @Injectable()
@@ -60,22 +69,33 @@ export class RulesDbService {
       data: {
         name: data.name,
         jsonLogic: data.jsonLogic,
-        scenario: {
-          connect: {
-            id: data.scenarioId,
-          },
-        },
+        scenarioRules: data.scenarioId
+          ? {
+              create: {
+                scenarioId: data.scenarioId,
+              },
+            }
+          : undefined,
       },
     });
   }
 
   async updateRule(
     id: string,
-    data: Prisma.RuleUpdateInput
+    data: UpdateRuleParams
   ): Promise<Rule> {
     return this.prismaService.rule.update({
       where: { id },
-      data,
+      data: {
+        scenarioRules: {
+          deleteMany: {},
+          createMany: {
+            data: data.scenarioIds.map((s) => ({
+              scenarioId: s,
+            })),
+          },
+        },
+      },
     });
   }
 
@@ -84,6 +104,12 @@ export class RulesDbService {
       where: {
         id,
       },
+    });
+  }
+
+  async deleteRule(id: string): Promise<Rule> {
+    return this.prismaService.rule.delete({
+      where: { id },
     });
   }
 
@@ -109,23 +135,13 @@ export class RulesDbService {
     });
   }
 
-  async getRuleAlerts(id: string): Promise<Alert[] | null> {
-    return this.prismaService.rule
+  async getRuleScenarios(
+    id: string
+  ): Promise<Scenario[] | null> {
+    const scenarioRules = await this.prismaService.rule
       .findUnique({ where: { id } })
-      .alerts();
-  }
+      .scenarioRules({ select: { scenario: true } });
 
-  async getRuleScenario(id: string): Promise<Scenario> {
-    const scenario = await this.prismaService.rule
-      .findUnique({ where: { id } })
-      .scenario();
-
-    if (!scenario) {
-      throw new Error(
-        'Impossible to find the Scenario attached to this Rule'
-      );
-    }
-
-    return scenario;
+    return scenarioRules?.map((s) => s.scenario) || null;
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Scenario } from '@prisma/client';
+import { Prisma, Rule, Scenario } from '@prisma/client';
 
 import {
   CreateEntityParams,
@@ -20,15 +20,21 @@ interface GetScenariosOptions {
   sorting?: SortingOptions;
 }
 
-type CreateScenarioParams = Omit<
-  CreateEntityParams<Prisma.ScenarioCreateInput>,
-  'rules'
->;
+interface CreateScenarioParams
+  extends Omit<
+    CreateEntityParams<Prisma.ScenarioCreateInput>,
+    'scenarioRules' | 'alerts'
+  > {
+  ruleIds: string[];
+}
 
-type UpdateScenarioParams = Omit<
-  UpdateEntityParams<Prisma.ScenarioUpdateInput>,
-  'rules'
->;
+interface UpdateScenarioParams
+  extends Omit<
+    UpdateEntityParams<Prisma.ScenarioUpdateInput>,
+    'scenarioRules' | 'alerts'
+  > {
+  ruleIds?: string[];
+}
 
 @Injectable()
 export class ScenariosDbService {
@@ -61,6 +67,13 @@ export class ScenariosDbService {
       data: {
         name: data.name,
         isEnabled: data.isEnabled,
+        scenarioRules: {
+          createMany: {
+            data: data.ruleIds.map((id) => ({
+              ruleId: id,
+            })),
+          },
+        },
       },
     });
   }
@@ -71,7 +84,20 @@ export class ScenariosDbService {
   ): Promise<Scenario> {
     return this.prismaService.scenario.update({
       where: { id },
-      data,
+      data: {
+        name: data.name,
+        isEnabled: data.isEnabled,
+        scenarioRules: data.ruleIds
+          ? {
+              deleteMany: {},
+              createMany: {
+                data: data.ruleIds.map((id) => ({
+                  ruleId: id,
+                })),
+              },
+            }
+          : undefined,
+      },
     });
   }
 
@@ -105,5 +131,15 @@ export class ScenariosDbService {
     return this.prismaService.scenario.count({
       where: this.#buildWhereParams(params),
     });
+  }
+
+  async getScenarioRules(
+    id: string
+  ): Promise<Rule[] | null> {
+    const scenarioRules = await this.prismaService.scenario
+      .findUnique({ where: { id } })
+      .scenarioRules({ select: { rule: true } });
+
+    return scenarioRules?.map((s) => s.rule) || null;
   }
 }
