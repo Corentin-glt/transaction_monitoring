@@ -1,0 +1,36 @@
+fragment ruleFragment on Rule {
+  id
+  name
+  jsonLogic
+  createdAt
+}
+
+query Rule($ruleId: ID!) {
+  rule(id: $ruleId) {
+    ...ruleFragment
+  }
+}
+
+query RulesConnection($ids: [ID!], $name: String) {
+  rulesConnection(ids: $ids, name: $name) {
+    count
+    items {
+      ...ruleFragment
+    }
+  }
+}
+
+mutation CreateRule($input: CreateRuleInput!) {
+  createRule(input: $input) {
+    ...ruleFragment
+  }
+}
+
+mutation UpdateRule(
+  $updateRuleId: ID!
+  $input: UpdateRuleInput!
+) {
+  updateRule(id: $updateRuleId, input: $input) {
+    ...ruleFragment
+  }
+}

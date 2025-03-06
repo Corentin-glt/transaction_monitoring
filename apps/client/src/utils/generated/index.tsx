@@ -46,6 +46,11 @@ export type BulkInsertTransaction = {
   success: Scalars['Boolean']['output'];
 };
 
+export type CreateRuleInput = {
+  jsonLogic: Scalars['JSON']['input'];
+  name: Scalars['String']['input'];
+};
+
 export type CreateTransactionInput = {
   amount: Scalars['Float']['input'];
   currency?: InputMaybe<Scalars['Currency']['input']>;
@@ -61,8 +66,14 @@ export type CreateTransactionsInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createRule: Rule;
   createTransaction: Transaction;
   createTransactions: BulkInsertTransaction;
+  updateRule: Rule;
+};
+
+export type MutationCreateRuleArgs = {
+  input: CreateRuleInput;
 };
 
 export type MutationCreateTransactionArgs = {
@@ -73,10 +84,26 @@ export type MutationCreateTransactionsArgs = {
   input: CreateTransactionsInput;
 };
 
+export type MutationUpdateRuleArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateRuleInput;
+};
+
 export type Query = {
   __typename?: 'Query';
+  rule: Rule;
+  rulesConnection: RulesConnection;
   transaction: Transaction;
   transactionsConnection: TransactionsConnection;
+};
+
+export type QueryRuleArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type QueryRulesConnectionArgs = {
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type QueryTransactionArgs = {
@@ -92,6 +119,30 @@ export type QueryTransactionsConnectionArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   sourceAccount?: InputMaybe<Scalars['String']['input']>;
   targetAccount?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Rule = {
+  __typename?: 'Rule';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  jsonLogic: Scalars['JSON']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type RulesConnection = {
+  __typename?: 'RulesConnection';
+  count: Scalars['Int']['output'];
+  items: Array<Rule>;
+};
+
+export type RulesConnectionItemsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<RulesConnectionSortingInput>;
+};
+
+export type RulesConnectionSortingInput = {
+  createdAt?: InputMaybe<SortingEnum>;
 };
 
 export enum SortingEnum {
@@ -126,6 +177,89 @@ export type TransactionsConnectionItemsArgs = {
 export type TransactionsConnectionSortingInput = {
   amount?: InputMaybe<SortingEnum>;
   createdAt?: InputMaybe<SortingEnum>;
+};
+
+export type UpdateRuleInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  scenarioIds?: InputMaybe<
+    Array<Scalars['String']['input']>
+  >;
+};
+
+export type RuleFragmentFragment = {
+  __typename?: 'Rule';
+  id: string;
+  name: string;
+  jsonLogic: any;
+  createdAt: any;
+};
+
+export type RuleQueryVariables = Exact<{
+  ruleId: Scalars['ID']['input'];
+}>;
+
+export type RuleQuery = {
+  __typename?: 'Query';
+  rule: {
+    __typename?: 'Rule';
+    id: string;
+    name: string;
+    jsonLogic: any;
+    createdAt: any;
+  };
+};
+
+export type RulesConnectionQueryVariables = Exact<{
+  ids?: InputMaybe<
+    Array<Scalars['ID']['input']> | Scalars['ID']['input']
+  >;
+  name?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+export type RulesConnectionQuery = {
+  __typename?: 'Query';
+  rulesConnection: {
+    __typename?: 'RulesConnection';
+    count: number;
+    items: Array<{
+      __typename?: 'Rule';
+      id: string;
+      name: string;
+      jsonLogic: any;
+      createdAt: any;
+    }>;
+  };
+};
+
+export type CreateRuleMutationVariables = Exact<{
+  input: CreateRuleInput;
+}>;
+
+export type CreateRuleMutation = {
+  __typename?: 'Mutation';
+  createRule: {
+    __typename?: 'Rule';
+    id: string;
+    name: string;
+    jsonLogic: any;
+    createdAt: any;
+  };
+};
+
+export type UpdateRuleMutationVariables = Exact<{
+  updateRuleId: Scalars['ID']['input'];
+  input: UpdateRuleInput;
+}>;
+
+export type UpdateRuleMutation = {
+  __typename?: 'Mutation';
+  updateRule: {
+    __typename?: 'Rule';
+    id: string;
+    name: string;
+    jsonLogic: any;
+    createdAt: any;
+  };
 };
 
 export type TransactionFragmentFragment = {
@@ -227,6 +361,14 @@ export type CreateTransactionMutation = {
   };
 };
 
+export const RuleFragmentFragmentDoc = gql`
+  fragment ruleFragment on Rule {
+    id
+    name
+    jsonLogic
+    createdAt
+  }
+`;
 export const TransactionFragmentFragmentDoc = gql`
   fragment transactionFragment on Transaction {
     id
@@ -239,6 +381,279 @@ export const TransactionFragmentFragmentDoc = gql`
     targetAccount
   }
 `;
+export const RuleDocument = gql`
+  query Rule($ruleId: ID!) {
+    rule(id: $ruleId) {
+      ...ruleFragment
+    }
+  }
+  ${RuleFragmentFragmentDoc}
+`;
+
+/**
+ * __useRuleQuery__
+ *
+ * To run a query within a React component, call `useRuleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRuleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRuleQuery({
+ *   variables: {
+ *      ruleId: // value for 'ruleId'
+ *   },
+ * });
+ */
+export function useRuleQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RuleQuery,
+    RuleQueryVariables
+  > &
+    (
+      | { variables: RuleQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<RuleQuery, RuleQueryVariables>(
+    RuleDocument,
+    options
+  );
+}
+export function useRuleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RuleQuery,
+    RuleQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<RuleQuery, RuleQueryVariables>(
+    RuleDocument,
+    options
+  );
+}
+export function useRuleSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        RuleQuery,
+        RuleQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    RuleQuery,
+    RuleQueryVariables
+  >(RuleDocument, options);
+}
+export type RuleQueryHookResult = ReturnType<
+  typeof useRuleQuery
+>;
+export type RuleLazyQueryHookResult = ReturnType<
+  typeof useRuleLazyQuery
+>;
+export type RuleSuspenseQueryHookResult = ReturnType<
+  typeof useRuleSuspenseQuery
+>;
+export type RuleQueryResult = Apollo.QueryResult<
+  RuleQuery,
+  RuleQueryVariables
+>;
+export const RulesConnectionDocument = gql`
+  query RulesConnection($ids: [ID!], $name: String) {
+    rulesConnection(ids: $ids, name: $name) {
+      count
+      items {
+        ...ruleFragment
+      }
+    }
+  }
+  ${RuleFragmentFragmentDoc}
+`;
+
+/**
+ * __useRulesConnectionQuery__
+ *
+ * To run a query within a React component, call `useRulesConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRulesConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRulesConnectionQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useRulesConnectionQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    RulesConnectionQuery,
+    RulesConnectionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    RulesConnectionQuery,
+    RulesConnectionQueryVariables
+  >(RulesConnectionDocument, options);
+}
+export function useRulesConnectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RulesConnectionQuery,
+    RulesConnectionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    RulesConnectionQuery,
+    RulesConnectionQueryVariables
+  >(RulesConnectionDocument, options);
+}
+export function useRulesConnectionSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        RulesConnectionQuery,
+        RulesConnectionQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    RulesConnectionQuery,
+    RulesConnectionQueryVariables
+  >(RulesConnectionDocument, options);
+}
+export type RulesConnectionQueryHookResult = ReturnType<
+  typeof useRulesConnectionQuery
+>;
+export type RulesConnectionLazyQueryHookResult = ReturnType<
+  typeof useRulesConnectionLazyQuery
+>;
+export type RulesConnectionSuspenseQueryHookResult =
+  ReturnType<typeof useRulesConnectionSuspenseQuery>;
+export type RulesConnectionQueryResult = Apollo.QueryResult<
+  RulesConnectionQuery,
+  RulesConnectionQueryVariables
+>;
+export const CreateRuleDocument = gql`
+  mutation CreateRule($input: CreateRuleInput!) {
+    createRule(input: $input) {
+      ...ruleFragment
+    }
+  }
+  ${RuleFragmentFragmentDoc}
+`;
+export type CreateRuleMutationFn = Apollo.MutationFunction<
+  CreateRuleMutation,
+  CreateRuleMutationVariables
+>;
+
+/**
+ * __useCreateRuleMutation__
+ *
+ * To run a mutation, you first call `useCreateRuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRuleMutation, { data, loading, error }] = useCreateRuleMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateRuleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateRuleMutation,
+    CreateRuleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateRuleMutation,
+    CreateRuleMutationVariables
+  >(CreateRuleDocument, options);
+}
+export type CreateRuleMutationHookResult = ReturnType<
+  typeof useCreateRuleMutation
+>;
+export type CreateRuleMutationResult =
+  Apollo.MutationResult<CreateRuleMutation>;
+export type CreateRuleMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateRuleMutation,
+    CreateRuleMutationVariables
+  >;
+export const UpdateRuleDocument = gql`
+  mutation UpdateRule(
+    $updateRuleId: ID!
+    $input: UpdateRuleInput!
+  ) {
+    updateRule(id: $updateRuleId, input: $input) {
+      ...ruleFragment
+    }
+  }
+  ${RuleFragmentFragmentDoc}
+`;
+export type UpdateRuleMutationFn = Apollo.MutationFunction<
+  UpdateRuleMutation,
+  UpdateRuleMutationVariables
+>;
+
+/**
+ * __useUpdateRuleMutation__
+ *
+ * To run a mutation, you first call `useUpdateRuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateRuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateRuleMutation, { data, loading, error }] = useUpdateRuleMutation({
+ *   variables: {
+ *      updateRuleId: // value for 'updateRuleId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateRuleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateRuleMutation,
+    UpdateRuleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateRuleMutation,
+    UpdateRuleMutationVariables
+  >(UpdateRuleDocument, options);
+}
+export type UpdateRuleMutationHookResult = ReturnType<
+  typeof useUpdateRuleMutation
+>;
+export type UpdateRuleMutationResult =
+  Apollo.MutationResult<UpdateRuleMutation>;
+export type UpdateRuleMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateRuleMutation,
+    UpdateRuleMutationVariables
+  >;
 export const TransactionDocument = gql`
   query Transaction($getTransactionByIdId: ID!) {
     transaction(id: $getTransactionByIdId) {

@@ -6,6 +6,11 @@ type BulkInsertTransaction {
   success: Boolean!
 }
 
+input CreateRuleInput {
+  jsonLogic: JSON!
+  name: String!
+}
+
 input CreateTransactionInput {
   amount: Float!
   currency: Currency
@@ -33,13 +38,33 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 scalar JSON
 
 type Mutation {
+  createRule(input: CreateRuleInput!): Rule!
   createTransaction(input: CreateTransactionInput!): Transaction!
   createTransactions(input: CreateTransactionsInput!): BulkInsertTransaction!
+  updateRule(id: ID!, input: UpdateRuleInput!): Rule!
 }
 
 type Query {
+  rule(id: ID!): Rule!
+  rulesConnection(ids: [ID!], name: String): RulesConnection!
   transaction(id: ID!): Transaction!
   transactionsConnection(amount: Float, currency: Currency, externalIds: [String!], ids: [String!], sourceAccount: String, targetAccount: String): TransactionsConnection!
+}
+
+type Rule {
+  createdAt: DateTime!
+  id: ID!
+  jsonLogic: JSON!
+  name: String!
+}
+
+type RulesConnection {
+  count: Int!
+  items(limit: Int, offset: Int, sorting: RulesConnectionSortingInput): [Rule!]!
+}
+
+input RulesConnectionSortingInput {
+  createdAt: SortingEnum
 }
 
 enum SortingEnum {
@@ -66,4 +91,9 @@ type TransactionsConnection {
 input TransactionsConnectionSortingInput {
   amount: SortingEnum
   createdAt: SortingEnum
+}
+
+input UpdateRuleInput {
+  name: String
+  scenarioIds: [String!]
 }

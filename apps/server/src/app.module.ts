@@ -7,9 +7,13 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { CoreModule } from '@transaction-monitoring/core';
 
 import { GraphQLModuleConfigService } from './graphql.service';
+import { RulesModule } from './modules/rules/rules.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 
-const applicationModules = [TransactionsModule];
+const applicationModules = [
+  TransactionsModule,
+  RulesModule,
+];
 
 @Module({
   imports: [

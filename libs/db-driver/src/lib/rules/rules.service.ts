@@ -1,10 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  Alert,
-  Prisma,
-  Rule,
-  Scenario,
-} from '@prisma/client';
+import { Prisma, Rule, Scenario } from '@prisma/client';
 
 import {
   CreateEntityParams,
@@ -29,16 +24,18 @@ interface CreateRuleParams
     CreateEntityParams<Prisma.RuleCreateInput>,
     'alerts' | 'scenario'
   > {
-  scenarioId?: string;
+  scenarioIds?: string[];
 }
 
 interface UpdateRuleParams
   extends Omit<
     UpdateEntityParams<Prisma.RuleUpdateInput>,
-    'jsonLogic' | ''
+    'jsonLogic'
   > {
-  scenarioIds: string[];
+  scenarioIds?: string[];
 }
+
+export type RuleEntity = Rule;
 
 @Injectable()
 export class RulesDbService {
@@ -69,10 +66,12 @@ export class RulesDbService {
       data: {
         name: data.name,
         jsonLogic: data.jsonLogic,
-        scenarioRules: data.scenarioId
+        scenarioRules: data.scenarioIds
           ? {
-              create: {
-                scenarioId: data.scenarioId,
+              createMany: {
+                data: data.scenarioIds.map((s) => ({
+                  scenarioId: s,
+                })),
               },
             }
           : undefined,
@@ -87,14 +86,17 @@ export class RulesDbService {
     return this.prismaService.rule.update({
       where: { id },
       data: {
-        scenarioRules: {
-          deleteMany: {},
-          createMany: {
-            data: data.scenarioIds.map((s) => ({
-              scenarioId: s,
-            })),
-          },
-        },
+        name: data.name,
+        scenarioRules: data.scenarioIds
+          ? {
+              deleteMany: {},
+              createMany: {
+                data: data.scenarioIds.map((s) => ({
+                  scenarioId: s,
+                })),
+              },
+            }
+          : undefined,
       },
     });
   }
