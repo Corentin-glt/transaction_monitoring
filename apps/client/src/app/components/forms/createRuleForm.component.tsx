@@ -3,17 +3,22 @@ import {
   Button,
   Fieldset,
   Legend,
+  Switch,
   Text,
 } from '@transaction-monitoring/client-components';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { formatQuery } from 'react-querybuilder';
 import * as yup from 'yup';
 
 import InputField from '../inputs/inputField.component';
+import QueryBuilderField from '../inputs/queryBuilderField.component';
+import SwitchFieldComponent from '../inputs/switchField.component';
 
 const schema = yup
   .object({
     name: yup.string().required('The name is mandatory'),
+    isAggregate: yup.boolean().required(),
     jsonLogic: yup
       .mixed()
       .required('The json logic is mandatory'),
@@ -29,8 +34,10 @@ interface CreateRuleFormProps {
 
 const CreateRuleForm: FunctionComponent<CreateRuleFormProps> =
   function ({ onSubmit }) {
+    const [checked, setChecked] = useState(true);
     const {
       handleSubmit,
+      control,
       register,
       reset,
       formState: { errors, isValid },
@@ -41,7 +48,13 @@ const CreateRuleForm: FunctionComponent<CreateRuleFormProps> =
     return (
       <form
         onSubmit={handleSubmit(async (data) => {
-          await onSubmit(data);
+          await onSubmit({
+            ...data,
+            jsonLogic: formatQuery(
+              data.jsonLogic as any,
+              'jsonlogic'
+            ),
+          });
           reset();
         })}
       >
@@ -56,7 +69,19 @@ const CreateRuleForm: FunctionComponent<CreateRuleFormProps> =
             register={register}
             error={errors.name}
           />
+          <QueryBuilderField
+            control={control}
+            label="Logic"
+            name="jsonLogic"
+          />
+          <SwitchFieldComponent
+            label="Aggregate mode"
+            name="isAggregate"
+            description="If you enable the aggregate mode, the rule will be applied on an aggregate of transactions. (E.g: sum of amount between given date)"
+            control={control}
+          />
         </Fieldset>
+
         <Button
           className="p-2 hover:cursor-pointer disabled:cursor-default disabled:opacity-50"
           type="submit"

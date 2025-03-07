@@ -17,7 +17,7 @@ const AddRulePage: FunctionComponent = function () {
       });
       navigate('/rules');
     },
-    refetchQueries: ['TransactionsConnection'],
+    refetchQueries: ['RulesConnection'],
   });
 
   return (

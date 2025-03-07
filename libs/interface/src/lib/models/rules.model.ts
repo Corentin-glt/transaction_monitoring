@@ -4,7 +4,7 @@ export interface RuleModel {
   id: string;
   name: string;
   jsonLogic: any;
-
+  isAggregate: boolean;
   scenarios?: ScenarioModel[];
 
   createdAt: Date;

@@ -36,6 +36,9 @@ export class Rule {
   @Field(() => GraphQLJSON)
   public jsonLogic: any;
 
+  @Field(() => Boolean)
+  public isAggregate: boolean;
+
   @Field(() => Date)
   public createdAt: Date;
 }
@@ -47,6 +50,9 @@ export class CreateRuleInput {
 
   @Field(() => GraphQLJSON)
   public jsonLogic: any;
+
+  @Field(() => Boolean)
+  public isAggregate: boolean;
 }
 
 @InputType()

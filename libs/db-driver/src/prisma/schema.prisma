@@ -61,9 +61,10 @@ model Alert {
 }
 
 model Rule {
-  id        String @id @default(uuid())
-  name      String
-  jsonLogic Json
+  id          String  @id @default(uuid())
+  name        String
+  jsonLogic   Json
+  isAggregate Boolean @default(false)
 
   scenarioRules ScenarioRule[]
 

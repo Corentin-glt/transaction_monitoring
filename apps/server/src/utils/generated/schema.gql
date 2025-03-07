@@ -7,6 +7,7 @@ type BulkInsertTransaction {
 }
 
 input CreateRuleInput {
+  isAggregate: Boolean!
   jsonLogic: JSON!
   name: String!
 }
@@ -54,6 +55,7 @@ type Query {
 type Rule {
   createdAt: DateTime!
   id: ID!
+  isAggregate: Boolean!
   jsonLogic: JSON!
   name: String!
   scenarios: [Scenario!]

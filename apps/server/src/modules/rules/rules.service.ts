@@ -12,6 +12,7 @@ import {
 
 interface CreateRuleParams {
   name: string;
+  isAggregate: boolean;
   jsonLogic: any;
   scenarioIds?: string[];
 }

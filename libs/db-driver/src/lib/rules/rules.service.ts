@@ -66,6 +66,7 @@ export class RulesDbService {
       data: {
         name: data.name,
         jsonLogic: data.jsonLogic,
+        isAggregate: data.isAggregate,
         scenarioRules: data.scenarioIds
           ? {
               createMany: {
