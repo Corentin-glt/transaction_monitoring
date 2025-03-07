@@ -20,6 +20,8 @@ interface CreateRuleParams {
 interface UpdateRuleParams {
   name?: string;
   scenarioIds?: string[];
+  isAggregate?: boolean;
+  jsonLogic?: any;
 }
 
 interface FindRulesParams {
@@ -92,5 +94,10 @@ export class RulesService {
     id: string
   ): Promise<ScenarioModel[]> {
     return this.rulesDbService.getRuleScenarios(id);
+  }
+
+  async deleteRule(id: string): Promise<RuleModel> {
+    const rule = await this.rulesDbService.deleteRule(id);
+    return this.#buildFormat(rule);
   }
 }

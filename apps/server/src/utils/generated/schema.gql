@@ -42,6 +42,7 @@ type Mutation {
   createRule(input: CreateRuleInput!): Rule!
   createTransaction(input: CreateTransactionInput!): Transaction!
   createTransactions(input: CreateTransactionsInput!): BulkInsertTransaction!
+  deleteRule(id: ID!): Rule!
   updateRule(id: ID!, input: UpdateRuleInput!): Rule!
 }
 
@@ -102,6 +103,8 @@ input TransactionsConnectionSortingInput {
 }
 
 input UpdateRuleInput {
+  isAggregate: Boolean
+  jsonLogic: JSON
   name: String
   scenarioIds: [String!]
 }

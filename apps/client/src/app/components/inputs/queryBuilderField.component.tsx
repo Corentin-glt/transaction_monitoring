@@ -4,7 +4,9 @@ import {
 } from '@transaction-monitoring/client-components';
 import { FunctionComponent } from 'react';
 import { Control, Controller } from 'react-hook-form';
-import QueryBuilder, { formatQuery } from 'react-querybuilder';
+import QueryBuilder, {
+  formatQuery,
+} from 'react-querybuilder';
 import 'react-querybuilder/dist/query-builder.css';
 
 const fields = [
@@ -17,10 +19,11 @@ interface QueryBuilderFieldProps {
   control: Control<any>;
   name: string;
   label: string;
+  defaultValue?: any;
 }
 
 const QueryBuilderField: FunctionComponent<QueryBuilderFieldProps> =
-  function ({ control, name, label }) {
+  function ({ control, name, label, defaultValue }) {
     return (
       <Field>
         <Label>{label}</Label>

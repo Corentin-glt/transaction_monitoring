@@ -22,7 +22,7 @@ interface GetRulesOptions {
 interface CreateRuleParams
   extends Omit<
     CreateEntityParams<Prisma.RuleCreateInput>,
-    'alerts' | 'scenario'
+    'alerts' | 'scenarioRules'
   > {
   scenarioIds?: string[];
 }
@@ -30,7 +30,7 @@ interface CreateRuleParams
 interface UpdateRuleParams
   extends Omit<
     UpdateEntityParams<Prisma.RuleUpdateInput>,
-    'jsonLogic'
+    'scenarioRules'
   > {
   scenarioIds?: string[];
 }
@@ -88,6 +88,8 @@ export class RulesDbService {
       where: { id },
       data: {
         name: data.name,
+        jsonLogic: data.jsonLogic,
+        isAggregate: data.isAggregate,
         scenarioRules: data.scenarioIds
           ? {
               deleteMany: {},

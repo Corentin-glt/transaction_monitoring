@@ -3,6 +3,7 @@ fragment ruleFragment on Rule {
   name
   jsonLogic
   createdAt
+  isAggregate
   scenarios {
     id
     name
@@ -45,6 +46,12 @@ mutation UpdateRule(
   $input: UpdateRuleInput!
 ) {
   updateRule(id: $updateRuleId, input: $input) {
+    ...ruleFragment
+  }
+}
+
+mutation DeleteRule($ruleId: ID!) {
+  deleteRule(id: $ruleId) {
     ...ruleFragment
   }
 }

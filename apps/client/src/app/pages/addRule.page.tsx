@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCreateRuleMutation } from '../../utils/generated';
 import { ToastIntent } from '../../utils/providers/toasts/toastProvider';
 import { useToast } from '../../utils/providers/toasts/toastService';
-import CreateRuleForm from '../components/forms/createRuleForm.component';
+import RuleForm from '../components/forms/ruleForm.component';
 
 const AddRulePage: FunctionComponent = function () {
   const toast = useToast();
@@ -21,19 +21,18 @@ const AddRulePage: FunctionComponent = function () {
   });
 
   return (
-    <div>
-      <CreateRuleForm
-        onSubmit={(data) =>
-          createRule({
-            variables: {
-              input: {
-                ...data,
-              },
+    <RuleForm
+      loading={loading}
+      onSubmit={(data) =>
+        createRule({
+          variables: {
+            input: {
+              ...data,
             },
-          })
-        }
-      />
-    </div>
+          },
+        })
+      }
+    />
   );
 };
 

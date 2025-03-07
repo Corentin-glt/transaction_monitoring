@@ -54,6 +54,13 @@ export class RulesResolver {
   ) {
     return this.rulesService.updateRule(id, input);
   }
+  
+  @Mutation(() => Rule)
+  async deleteRule(
+    @Args('id', { type: () => ID }) id: string,
+  ) {
+    return this.rulesService.deleteRule(id);
+  }
 
   @ResolveField('scenarios')
   async scenarios(

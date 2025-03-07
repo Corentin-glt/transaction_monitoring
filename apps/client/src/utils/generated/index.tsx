@@ -47,6 +47,7 @@ export type BulkInsertTransaction = {
 };
 
 export type CreateRuleInput = {
+  isAggregate: Scalars['Boolean']['input'];
   jsonLogic: Scalars['JSON']['input'];
   name: Scalars['String']['input'];
 };
@@ -69,6 +70,7 @@ export type Mutation = {
   createRule: Rule;
   createTransaction: Transaction;
   createTransactions: BulkInsertTransaction;
+  deleteRule: Rule;
   updateRule: Rule;
 };
 
@@ -82,6 +84,10 @@ export type MutationCreateTransactionArgs = {
 
 export type MutationCreateTransactionsArgs = {
   input: CreateTransactionsInput;
+};
+
+export type MutationDeleteRuleArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type MutationUpdateRuleArgs = {
@@ -125,6 +131,7 @@ export type Rule = {
   __typename?: 'Rule';
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
+  isAggregate: Scalars['Boolean']['output'];
   jsonLogic: Scalars['JSON']['output'];
   name: Scalars['String']['output'];
   scenarios?: Maybe<Array<Scenario>>;
@@ -187,6 +194,8 @@ export type TransactionsConnectionSortingInput = {
 };
 
 export type UpdateRuleInput = {
+  isAggregate?: InputMaybe<Scalars['Boolean']['input']>;
+  jsonLogic?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   scenarioIds?: InputMaybe<
     Array<Scalars['String']['input']>
@@ -199,6 +208,7 @@ export type RuleFragmentFragment = {
   name: string;
   jsonLogic: any;
   createdAt: any;
+  isAggregate: boolean;
   scenarios?: Array<{
     __typename?: 'Scenario';
     id: string;
@@ -218,6 +228,7 @@ export type RuleQuery = {
     name: string;
     jsonLogic: any;
     createdAt: any;
+    isAggregate: boolean;
     scenarios?: Array<{
       __typename?: 'Scenario';
       id: string;
@@ -247,6 +258,7 @@ export type RulesConnectionQuery = {
       name: string;
       jsonLogic: any;
       createdAt: any;
+      isAggregate: boolean;
       scenarios?: Array<{
         __typename?: 'Scenario';
         id: string;
@@ -268,6 +280,7 @@ export type CreateRuleMutation = {
     name: string;
     jsonLogic: any;
     createdAt: any;
+    isAggregate: boolean;
     scenarios?: Array<{
       __typename?: 'Scenario';
       id: string;
@@ -289,6 +302,28 @@ export type UpdateRuleMutation = {
     name: string;
     jsonLogic: any;
     createdAt: any;
+    isAggregate: boolean;
+    scenarios?: Array<{
+      __typename?: 'Scenario';
+      id: string;
+      name: string;
+    }> | null;
+  };
+};
+
+export type DeleteRuleMutationVariables = Exact<{
+  ruleId: Scalars['ID']['input'];
+}>;
+
+export type DeleteRuleMutation = {
+  __typename?: 'Mutation';
+  deleteRule: {
+    __typename?: 'Rule';
+    id: string;
+    name: string;
+    jsonLogic: any;
+    createdAt: any;
+    isAggregate: boolean;
     scenarios?: Array<{
       __typename?: 'Scenario';
       id: string;
@@ -402,6 +437,7 @@ export const RuleFragmentFragmentDoc = gql`
     name
     jsonLogic
     createdAt
+    isAggregate
     scenarios {
       id
       name
@@ -705,6 +741,58 @@ export type UpdateRuleMutationOptions =
   Apollo.BaseMutationOptions<
     UpdateRuleMutation,
     UpdateRuleMutationVariables
+  >;
+export const DeleteRuleDocument = gql`
+  mutation DeleteRule($ruleId: ID!) {
+    deleteRule(id: $ruleId) {
+      ...ruleFragment
+    }
+  }
+  ${RuleFragmentFragmentDoc}
+`;
+export type DeleteRuleMutationFn = Apollo.MutationFunction<
+  DeleteRuleMutation,
+  DeleteRuleMutationVariables
+>;
+
+/**
+ * __useDeleteRuleMutation__
+ *
+ * To run a mutation, you first call `useDeleteRuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteRuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteRuleMutation, { data, loading, error }] = useDeleteRuleMutation({
+ *   variables: {
+ *      ruleId: // value for 'ruleId'
+ *   },
+ * });
+ */
+export function useDeleteRuleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteRuleMutation,
+    DeleteRuleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteRuleMutation,
+    DeleteRuleMutationVariables
+  >(DeleteRuleDocument, options);
+}
+export type DeleteRuleMutationHookResult = ReturnType<
+  typeof useDeleteRuleMutation
+>;
+export type DeleteRuleMutationResult =
+  Apollo.MutationResult<DeleteRuleMutation>;
+export type DeleteRuleMutationOptions =
+  Apollo.BaseMutationOptions<
+    DeleteRuleMutation,
+    DeleteRuleMutationVariables
   >;
 export const TransactionDocument = gql`
   query Transaction($getTransactionByIdId: ID!) {

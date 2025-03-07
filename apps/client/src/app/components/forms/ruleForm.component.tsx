@@ -3,14 +3,15 @@ import {
   Button,
   Fieldset,
   Legend,
-  Switch,
   Text,
 } from '@transaction-monitoring/client-components';
 import { FunctionComponent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { formatQuery } from 'react-querybuilder';
+import { parseJsonLogic } from 'react-querybuilder/parseJsonLogic';
 import * as yup from 'yup';
 
+import { Rule } from '../../../utils/generated';
 import InputField from '../inputs/inputField.component';
 import QueryBuilderField from '../inputs/queryBuilderField.component';
 import SwitchFieldComponent from '../inputs/switchField.component';
@@ -20,29 +21,50 @@ const schema = yup
     name: yup.string().required('The name is mandatory'),
     isAggregate: yup.boolean().required(),
     jsonLogic: yup
-      .mixed()
-      .required('The json logic is mandatory'),
+      .object()
+      .shape({
+        combinator: yup
+          .string()
+          .required('Combinator is required'),
+        rules: yup
+          .array()
+          .min(1, 'At least one rule is required'),
+      })
+      .required(),
     scenarioIds: yup.array(yup.string().required()),
   })
   .required();
 
-type ICreateRulesInputs = yup.InferType<typeof schema>;
+type IRuleFormsInputs = yup.InferType<typeof schema>;
 
-interface CreateRuleFormProps {
+interface RuleFormFormProps {
   onSubmit: (data: any) => Promise<any>;
+  defaultRule?: Rule;
+  loading?: boolean;
 }
 
-const CreateRuleForm: FunctionComponent<CreateRuleFormProps> =
-  function ({ onSubmit }) {
+const RuleForm: FunctionComponent<RuleFormFormProps> =
+  function ({ onSubmit, defaultRule, loading }) {
     const [checked, setChecked] = useState(true);
     const {
       handleSubmit,
       control,
       register,
       reset,
+      getValues,
       formState: { errors, isValid },
-    } = useForm<ICreateRulesInputs>({
+    } = useForm<IRuleFormsInputs>({
       resolver: yupResolver(schema),
+      defaultValues: {
+        name: defaultRule?.name,
+        isAggregate: defaultRule?.isAggregate,
+        jsonLogic: defaultRule?.jsonLogic
+          ? parseJsonLogic(defaultRule.jsonLogic)
+          : undefined,
+        scenarioIds: defaultRule?.scenarios?.map(
+          (s) => s.id
+        ),
+      },
     });
 
     return (
@@ -73,6 +95,7 @@ const CreateRuleForm: FunctionComponent<CreateRuleFormProps> =
             control={control}
             label="Logic"
             name="jsonLogic"
+            defaultValue={getValues('jsonLogic')}
           />
           <SwitchFieldComponent
             label="Aggregate mode"
@@ -85,12 +108,12 @@ const CreateRuleForm: FunctionComponent<CreateRuleFormProps> =
         <Button
           className="p-2 hover:cursor-pointer disabled:cursor-default disabled:opacity-50"
           type="submit"
-          disabled={!isValid}
+          disabled={!isValid || loading}
         >
-          Submit rule
+          {!loading ? 'Submit rule' : 'Loading'}
         </Button>
       </form>
     );
   };
 
-export default CreateRuleForm;
+export default RuleForm;

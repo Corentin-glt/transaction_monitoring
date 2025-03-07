@@ -44,6 +44,7 @@ export interface BulkInsertTransaction {
 }
 
 export interface CreateRuleInput {
+  isAggregate: Scalars['Boolean']['input'];
   jsonLogic: Scalars['JSON']['input'];
   name: Scalars['String']['input'];
 }
@@ -66,6 +67,7 @@ export interface Mutation {
   createRule: Rule;
   createTransaction: Transaction;
   createTransactions: BulkInsertTransaction;
+  deleteRule: Rule;
   updateRule: Rule;
 }
 
@@ -79,6 +81,10 @@ export interface MutationCreateTransactionArgs {
 
 export interface MutationCreateTransactionsArgs {
   input: CreateTransactionsInput;
+}
+
+export interface MutationDeleteRuleArgs {
+  id: Scalars['ID']['input'];
 }
 
 export interface MutationUpdateRuleArgs {
@@ -122,6 +128,7 @@ export interface Rule {
   __typename?: 'Rule';
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
+  isAggregate: Scalars['Boolean']['output'];
   jsonLogic: Scalars['JSON']['output'];
   name: Scalars['String']['output'];
   scenarios?: Maybe<Array<Scenario>>;
@@ -184,6 +191,8 @@ export interface TransactionsConnectionSortingInput {
 }
 
 export interface UpdateRuleInput {
+  isAggregate?: InputMaybe<Scalars['Boolean']['input']>;
+  jsonLogic?: InputMaybe<Scalars['JSON']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   scenarioIds?: InputMaybe<
     Array<Scalars['String']['input']>

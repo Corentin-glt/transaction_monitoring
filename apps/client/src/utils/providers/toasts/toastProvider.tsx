@@ -50,9 +50,9 @@ const ToastProvider: FunctionComponent<React.PropsWithChildren> =
             >
               <button
                 onClick={() => close(id)}
-                className="absolute top-2  right-2 p-1 bg-gray-200/20 text-gray-800/20"
+                className="absolute -top-2  rounded right-0 p-1 bg-white text-badoit"
               >
-                <XMarkIcon className="h-2 w-2" />
+                <XMarkIcon className="h-3 w-3" />
               </button>
 
               {intent === ToastIntent.ERROR ? (
@@ -64,7 +64,7 @@ const ToastProvider: FunctionComponent<React.PropsWithChildren> =
                   </div>
                 </div>
               ) : (
-                <div className="flex gap-2 bg-palette-4 text-white p-4 rounded-6 shadow-md">
+                <div className="flex gap-2  text-white p-4 rounded-6 shadow-md bg-badoit">
                   <CheckBadgeIcon className="h-6 w-6" />
                   <div className="flex flex-col">
                     <h3 className="font-bold">{title}</h3>

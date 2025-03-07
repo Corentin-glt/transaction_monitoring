@@ -58,10 +58,16 @@ export class CreateRuleInput {
 @InputType()
 export class UpdateRuleInput {
   @Field(() => String, { nullable: true })
-  public name: string;
+  public name?: string;
+
+  @Field(() => GraphQLJSON, { nullable: true })
+  public jsonLogic?: any;
+
+  @Field(() => Boolean, { nullable: true })
+  public isAggregate?: boolean;
 
   @Field(() => [String], { nullable: true })
-  public scenarioIds: string[];
+  public scenarioIds?: string[];
 }
 
 // RULES CONNECTION

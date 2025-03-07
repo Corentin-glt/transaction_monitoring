@@ -10,8 +10,6 @@ import {
 import { FunctionComponent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
-
 import { Rule } from '../../../utils/generated';
 
 interface RulesTableComponentProps {
@@ -28,6 +26,9 @@ const RulesTableComponent: FunctionComponent<RulesTableComponentProps> =
             <TableHeader>Name</TableHeader>
             <TableHeader>Creation date</TableHeader>
             <TableHeader>Scenarios</TableHeader>
+            <TableHeader className="text-right">
+              Aggregate
+            </TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -56,6 +57,9 @@ const RulesTableComponent: FunctionComponent<RulesTableComponentProps> =
                       <Badge color="lime">{s.name}</Badge>
                     )) || '-'}
                   </div>
+                </TableCell>
+                <TableCell className="text-right">
+                  {rule.isAggregate ? 'Yes' : 'No'}
                 </TableCell>
               </TableRow>
             );
