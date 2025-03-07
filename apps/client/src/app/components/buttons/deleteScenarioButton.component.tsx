@@ -8,33 +8,33 @@ import {
 import { FunctionComponent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useDeleteRuleMutation } from '../../../utils/generated';
+import { useDeleteScenarioMutation } from '../../../utils/generated';
 import { ToastIntent } from '../../../utils/providers/toasts/toastProvider';
 import { useToast } from '../../../utils/providers/toasts/toastService';
 
-interface DeleteRuleButtonComponentProps {
-  ruleId: string;
+interface DeleteScenarioButtonComponentProps {
+  scenarioId: string;
 }
 
-const DeleteRuleButtonComponent: FunctionComponent<DeleteRuleButtonComponentProps> =
-  function ({ ruleId }) {
+const DeleteScenarioButtonComponent: FunctionComponent<DeleteScenarioButtonComponentProps> =
+  function ({ scenarioId }) {
     const [isOpen, setIsOpen] = useState(false);
     const toast = useToast();
     const navigate = useNavigate();
-    const [deleteRule] = useDeleteRuleMutation({
-      variables: { ruleId },
+    const [deleteScenario] = useDeleteScenarioMutation({
+      variables: { deleteScenarioId: scenarioId },
       onCompleted() {
         toast.open({
           intent: ToastIntent.SUCCESS,
-          title: 'Rule deleted with success',
+          title: 'Scenario deleted with success',
         });
-        navigate('/rules');
+        navigate('/scenarios');
       },
       refetchQueries: ['ScenariosConnection', 'RulesConnection'],
     });
 
     const handleDelete = () => {
-      deleteRule();
+      deleteScenario();
       setIsOpen(false);
     };
 
@@ -45,18 +45,18 @@ const DeleteRuleButtonComponent: FunctionComponent<DeleteRuleButtonComponentProp
           type="button"
           onClick={() => setIsOpen(true)}
         >
-          Delete rule
+          Delete scenario
         </Button>
         <Alert
           open={isOpen}
           onClose={setIsOpen}
         >
           <AlertTitle>
-            Are you sure you want to delete this rule?
+            Are you sure you want to delete this scenario?
           </AlertTitle>
           <AlertDescription>
-            Once rule is deleted, it will be detached from
-            the scenario.
+            Once scenario is deleted, it will be detached
+            from the rules.
           </AlertDescription>
           <AlertActions>
             <Button
@@ -78,4 +78,4 @@ const DeleteRuleButtonComponent: FunctionComponent<DeleteRuleButtonComponentProp
     );
   };
 
-export default DeleteRuleButtonComponent;
+export default DeleteScenarioButtonComponent;

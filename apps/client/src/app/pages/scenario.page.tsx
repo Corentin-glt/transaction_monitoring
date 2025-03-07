@@ -2,33 +2,36 @@ import { FunctionComponent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import {
-  Rule,
-  useRuleQuery,
-  useUpdateRuleMutation,
+  Scenario,
+  useScenarioQuery,
+  useUpdateScenarioMutation,
 } from '../../utils/generated';
 import { ToastIntent } from '../../utils/providers/toasts/toastProvider';
 import { useToast } from '../../utils/providers/toasts/toastService';
-import DeleteRuleButtonComponent from '../components/buttons/deleteRuleButton.component';
-import RuleForm from '../components/forms/ruleForm.component';
+import DeleteScenarioButtonComponent from '../components/buttons/deleteScenarioButton.component';
+import ScenarioForm from '../components/forms/scenarioForm.component';
 import LoaderComponent from '../components/loaders.component';
 
-const RulePage: FunctionComponent = function ({}) {
+const ScenarioPage: FunctionComponent = function ({}) {
   const { id } = useParams() as { id: string };
   const toast = useToast();
   const navigate = useNavigate();
-  const { data, loading, error } = useRuleQuery({
-    variables: { ruleId: id },
+  const { data, loading, error } = useScenarioQuery({
+    variables: { scenarioId: id },
   });
-  const [updateRule, { loading: loadingMutation }] =
-    useUpdateRuleMutation({
+  const [updateScenario, { loading: loadingMutation }] =
+    useUpdateScenarioMutation({
       onCompleted() {
         toast.open({
           intent: ToastIntent.SUCCESS,
-          title: 'Rule updated with success',
+          title: 'Scenario updated with success',
         });
-        navigate('/rules');
+        navigate('/scenarios');
       },
-      refetchQueries: ['ScenariosConnection', 'RulesConnection'],
+      refetchQueries: [
+        'ScenariosConnection',
+        'RulesConnection',
+      ],
     });
 
   if (error) {
@@ -39,25 +42,24 @@ const RulePage: FunctionComponent = function ({}) {
     return <LoaderComponent />;
   }
 
-  const rule = data?.rule as Rule;
+  const scenario = data?.scenario as Scenario;
 
   return (
     <div className="relative">
       <div className="absolute right-2 top-2">
-        <DeleteRuleButtonComponent ruleId={id} />
+        <DeleteScenarioButtonComponent scenarioId={id} />
       </div>
-      <RuleForm
+      <ScenarioForm
         loading={loadingMutation}
-        defaultRule={rule}
+        defaultScenario={scenario}
         onSubmit={(data) =>
-          updateRule({
+          updateScenario({
             variables: {
-              updateRuleId: id,
+              updateScenarioId: id,
               input: {
                 name: data.name,
-                isAggregate: data.isAggregate,
-                jsonLogic: data.jsonLogic,
-                scenarioIds: data.scenarioIds,
+                isEnabled: data.isAggregate,
+                ruleIds: data.ruleIds,
               },
             },
           })
@@ -67,4 +69,4 @@ const RulePage: FunctionComponent = function ({}) {
   );
 };
 
-export default RulePage;
+export default ScenarioPage;

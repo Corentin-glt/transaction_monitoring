@@ -38,8 +38,8 @@ export class CreateScenarioInput {
   @Field(() => Boolean)
   public isEnabled: boolean;
 
-  @Field(() => [ID], { nullable: true })
-  public ruleIds?: string[];
+  @Field(() => [ID])
+  public ruleIds: string[];
 }
 
 @InputType()

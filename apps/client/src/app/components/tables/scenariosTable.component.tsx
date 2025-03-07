@@ -10,14 +10,14 @@ import {
 import { FunctionComponent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Rule } from '../../../utils/generated';
+import { Scenario } from '../../../utils/generated';
 
-interface RulesTableComponentProps {
-  rules: Rule[];
+interface ScenariosTableComponentProps {
+  scenarios: Scenario[];
 }
 
-const RulesTableComponent: FunctionComponent<RulesTableComponentProps> =
-  function ({ rules }) {
+const ScenariosTableComponent: FunctionComponent<ScenariosTableComponentProps> =
+  function ({ scenarios }) {
     const navigate = useNavigate();
     return (
       <Table>
@@ -25,26 +25,28 @@ const RulesTableComponent: FunctionComponent<RulesTableComponentProps> =
           <TableRow>
             <TableHeader>Name</TableHeader>
             <TableHeader>Creation date</TableHeader>
-            <TableHeader>Scenarios</TableHeader>
+            <TableHeader>Rules</TableHeader>
             <TableHeader className="text-right">
-              Aggregate
+              Enabled
             </TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rules.map((rule) => {
+          {scenarios.map((scenario) => {
             return (
               <TableRow
                 className="hover:cursor-pointer hover:bg-zinc-400"
-                key={rule.id}
-                onClick={() => navigate(`/rules/${rule.id}`)}
+                key={scenario.id}
+                onClick={() =>
+                  navigate(`/scenarios/${scenario.id}`)
+                }
               >
                 <TableCell className="font-medium">
-                  {rule.name}
+                  {scenario.name}
                 </TableCell>
                 <TableCell className="text-sm">
                   {new Date(
-                    rule.createdAt
+                    scenario.createdAt
                   ).toLocaleDateString('en-GB', {
                     day: 'numeric',
                     month: 'long',
@@ -53,13 +55,13 @@ const RulesTableComponent: FunctionComponent<RulesTableComponentProps> =
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-3">
-                    {rule.scenarios?.map((s) => (
-                      <Badge color="lime">{s.name}</Badge>
+                    {scenario.rules?.map((r) => (
+                      <Badge color="lime">{r.name}</Badge>
                     )) || '-'}
                   </div>
                 </TableCell>
                 <TableCell className="text-right">
-                  {rule.isAggregate ? 'Yes' : 'No'}
+                  {scenario.isEnabled ? 'Yes' : 'No'}
                 </TableCell>
               </TableRow>
             );
@@ -69,4 +71,4 @@ const RulesTableComponent: FunctionComponent<RulesTableComponentProps> =
     );
   };
 
-export default RulesTableComponent;
+export default ScenariosTableComponent;

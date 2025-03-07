@@ -5,7 +5,7 @@ import {
   Legend,
   Text,
 } from '@transaction-monitoring/client-components';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { useForm } from 'react-hook-form';
 import { formatQuery } from 'react-querybuilder';
 import { parseJsonLogic } from 'react-querybuilder/parseJsonLogic';
@@ -45,7 +45,6 @@ interface RuleFormFormProps {
 
 const RuleForm: FunctionComponent<RuleFormFormProps> =
   function ({ onSubmit, defaultRule, loading }) {
-    const [checked, setChecked] = useState(true);
     const {
       handleSubmit,
       control,

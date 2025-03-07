@@ -6,18 +6,19 @@ import {
 } from 'react';
 
 import {
+  Scenario,
   SortingEnum,
-  useTransactionsConnectionQuery,
+  useScenariosConnectionQuery,
 } from '../../utils/generated';
 import LoaderComponent from '../components/loaders.component';
-import TransactionsTableComponent from '../components/tables/transactionsTable.component';
+import ScenariosTableComponent from '../components/tables/scenariosTable.component';
 import NextPreviousPagination from '../layouts/nextPreviousPagination.layout';
 
-const TransactionPage: FunctionComponent = function () {
+const ScenariosPage: FunctionComponent = function () {
   const [limit] = useState(20);
   const [offset, setOffset] = useState(0);
   const { data, loading, error, refetch, fetchMore } =
-    useTransactionsConnectionQuery({
+    useScenariosConnectionQuery({
       variables: {
         offset,
         limit,
@@ -38,6 +39,7 @@ const TransactionPage: FunctionComponent = function () {
   );
 
   if (loading) {
+    //TODO: make a loader component
     return <LoaderComponent />;
   }
 
@@ -46,13 +48,13 @@ const TransactionPage: FunctionComponent = function () {
     return <div>Error</div>;
   }
 
-  const transactions = data.transactionsConnection.items;
-  const total = data.transactionsConnection.count;
+  const scenarios = data.scenariosConnection.items;
+  const total = data.scenariosConnection.count;
 
   if (total === 0) {
     return (
       <div className="flex-1 flex flex-col justify-center items-center gap-y-8 min-h-svh">
-        <Text>No transactions exisiting yet</Text>
+        <Text>No scenarios exisiting yet</Text>
       </div>
     );
   }
@@ -65,14 +67,14 @@ const TransactionPage: FunctionComponent = function () {
     >
       <div className="flex w-full justify-end mb-8">
         <span className="dark:text-zinc-200">
-          Total transactions: {total}
+          Total scenarios: {total}
         </span>
       </div>
-      <TransactionsTableComponent
-        transactions={transactions}
+      <ScenariosTableComponent
+        scenarios={scenarios as Scenario[]}
       />
     </NextPreviousPagination>
   );
 };
 
-export default TransactionPage;
+export default ScenariosPage;

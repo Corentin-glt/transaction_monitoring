@@ -5,10 +5,13 @@ import {
 
 import AppLayout from './layouts/app.layout';
 import AddRulePage from './pages/addRule.page';
+import AddScenarioPage from './pages/addScenario.page';
 import AddTransactionsPage from './pages/addTransactions.page';
 import AlertsPage from './pages/alerts.page';
 import RulePage from './pages/rule.page';
 import RulesPage from './pages/rules.page';
+import ScenarioPage from './pages/scenario.page';
+import ScenariosPage from './pages/scenarios.page';
 import TransactionsPage from './pages/transactions.page';
 
 const router = createBrowserRouter([
@@ -29,16 +32,28 @@ const router = createBrowserRouter([
         element: <AlertsPage />,
       },
       {
-        path: '/addTransactions',
+        path: '/scenarios',
+        element: <ScenariosPage />,
+      },
+      {
+        path: '/transactions/add',
         element: <AddTransactionsPage />,
       },
       {
-        path: '/addRule',
+        path: '/rules/add',
         element: <AddRulePage />,
       },
       {
-        path: '/rule/:id',
+        path: '/rules/:id',
         element: <RulePage />,
+      },
+      {
+        path: '/scenarios/add',
+        element: <AddScenarioPage />,
+      },
+      {
+        path: '/scenarios/:id',
+        element: <ScenarioPage />,
       },
     ],
   },

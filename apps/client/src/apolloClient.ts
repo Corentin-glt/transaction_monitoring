@@ -142,6 +142,42 @@ const client = new ApolloClient({
           },
         },
       },
+      
+      ScenariosConnection: {
+        fields: {
+          items: {
+            ...offsetPagination(),
+            read(existing, { args }) {
+              if (!args) return existing;
+              const offset = args.offset || 0;
+              const limit = args.limit || existing?.length;
+
+              return (
+                existing &&
+                existing.slice(offset, offset + limit)
+              );
+            },
+          },
+        },
+      },
+      
+      AlertsConnection: {
+        fields: {
+          items: {
+            ...offsetPagination(),
+            read(existing, { args }) {
+              if (!args) return existing;
+              const offset = args.offset || 0;
+              const limit = args.limit || existing?.length;
+
+              return (
+                existing &&
+                existing.slice(offset, offset + limit)
+              );
+            },
+          },
+        },
+      },
 
       Query: {
         fields: {
@@ -156,6 +192,13 @@ const client = new ApolloClient({
             if (!args) return null;
             return toReference({
               __typename: 'Rule',
+              id: args.id,
+            });
+          },
+          scenario(_, { args, toReference }) {
+            if (!args) return null;
+            return toReference({
+              __typename: 'Scenario',
               id: args.id,
             });
           },

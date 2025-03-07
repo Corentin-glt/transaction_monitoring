@@ -13,7 +13,7 @@ import {
 interface CreateScenarioParams {
   name: string;
   isEnabled: boolean;
-  ruleIds?: string[];
+  ruleIds: string[];
 }
 
 interface UpdateScenarioParams {

@@ -6,9 +6,11 @@ import {
 } from 'react';
 
 import {
+  Rule,
   SortingEnum,
   useRulesConnectionQuery,
 } from '../../utils/generated';
+import LoaderComponent from '../components/loaders.component';
 import RulesTableComponent from '../components/tables/rulesTable.component';
 import NextPreviousPagination from '../layouts/nextPreviousPagination.layout';
 
@@ -37,8 +39,7 @@ const RulesPage: FunctionComponent = function ({}) {
   );
 
   if (loading) {
-    //TODO: make a loader component
-    return <div>loading</div>;
+    return <LoaderComponent />;
   }
 
   if (error || !data) {
@@ -68,7 +69,7 @@ const RulesPage: FunctionComponent = function ({}) {
           Total rules: {total}
         </span>
       </div>
-      <RulesTableComponent rules={rules} />
+      <RulesTableComponent rules={rules as Rule[]} />
     </NextPreviousPagination>
   );
 };

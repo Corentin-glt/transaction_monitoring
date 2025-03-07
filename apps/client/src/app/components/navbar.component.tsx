@@ -5,6 +5,7 @@ import {
 import {
   Dropdown,
   DropdownButton,
+  DropdownDivider,
   DropdownItem,
   DropdownLabel,
   DropdownMenu,
@@ -33,6 +34,11 @@ const menu: Menu[] = [
     title: 'Rules',
     link: '/rules',
     icon: '🏗️',
+  },
+  {
+    title: 'Scenario',
+    link: '/scenarios',
+    icon: '📖',
   },
   {
     title: 'Alerts',
@@ -93,14 +99,22 @@ const NavbarComponent: FunctionComponent = function () {
           anchor="bottom start"
         >
           <DropdownItem
-            onClick={() => navigate('/addTransactions')}
+            onClick={() => navigate('/transactions/add')}
           >
             <DropdownLabel>Bulk transactions</DropdownLabel>
           </DropdownItem>
+          <DropdownDivider />
           <DropdownItem
-            onClick={() => navigate('/addRule')}
+            onClick={() => navigate('/rules/add')}
           >
             <DropdownLabel>Create a new rule</DropdownLabel>
+          </DropdownItem>
+          <DropdownItem
+            onClick={() => navigate('/scenarios/add')}
+          >
+            <DropdownLabel>
+              Create a new scenario
+            </DropdownLabel>
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
