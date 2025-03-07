@@ -52,6 +52,12 @@ export type CreateRuleInput = {
   name: Scalars['String']['input'];
 };
 
+export type CreateScenarioInput = {
+  isEnabled: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
+  ruleIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 export type CreateTransactionInput = {
   amount: Scalars['Float']['input'];
   currency?: InputMaybe<Scalars['Currency']['input']>;
@@ -68,14 +74,21 @@ export type CreateTransactionsInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   createRule: Rule;
+  createScenario: Scenario;
   createTransaction: Transaction;
   createTransactions: BulkInsertTransaction;
   deleteRule: Rule;
+  deleteScenario: Scenario;
   updateRule: Rule;
+  updateScenario: Scenario;
 };
 
 export type MutationCreateRuleArgs = {
   input: CreateRuleInput;
+};
+
+export type MutationCreateScenarioArgs = {
+  input: CreateScenarioInput;
 };
 
 export type MutationCreateTransactionArgs = {
@@ -90,15 +103,26 @@ export type MutationDeleteRuleArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type MutationDeleteScenarioArgs = {
+  id: Scalars['ID']['input'];
+};
+
 export type MutationUpdateRuleArgs = {
   id: Scalars['ID']['input'];
   input: UpdateRuleInput;
+};
+
+export type MutationUpdateScenarioArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateScenarioInput;
 };
 
 export type Query = {
   __typename?: 'Query';
   rule: Rule;
   rulesConnection: RulesConnection;
+  scenario: Scenario;
+  scenariosConnection: ScenariosConnection;
   transaction: Transaction;
   transactionsConnection: TransactionsConnection;
 };
@@ -108,6 +132,15 @@ export type QueryRuleArgs = {
 };
 
 export type QueryRulesConnectionArgs = {
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type QueryScenarioArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type QueryScenariosConnectionArgs = {
   ids?: InputMaybe<Array<Scalars['ID']['input']>>;
   name?: InputMaybe<Scalars['String']['input']>;
 };
@@ -155,8 +188,27 @@ export type RulesConnectionSortingInput = {
 
 export type Scenario = {
   __typename?: 'Scenario';
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
+  isEnabled?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
+  rules?: Maybe<Array<Rule>>;
+};
+
+export type ScenariosConnection = {
+  __typename?: 'ScenariosConnection';
+  count: Scalars['Int']['output'];
+  items: Array<Scenario>;
+};
+
+export type ScenariosConnectionItemsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<ScenariosConnectionSortingInput>;
+};
+
+export type ScenariosConnectionSortingInput = {
+  createdAt?: InputMaybe<SortingEnum>;
 };
 
 export enum SortingEnum {
@@ -200,6 +252,12 @@ export type UpdateRuleInput = {
   scenarioIds?: InputMaybe<
     Array<Scalars['String']['input']>
   >;
+};
+
+export type UpdateScenarioInput = {
+  isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  ruleIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type RuleFragmentFragment = {
@@ -332,6 +390,142 @@ export type DeleteRuleMutation = {
   };
 };
 
+export type ScenarioFragmentFragment = {
+  __typename?: 'Scenario';
+  id: string;
+  createdAt: any;
+  isEnabled?: boolean | null;
+  name: string;
+  rules?: Array<{
+    __typename?: 'Rule';
+    id: string;
+    isAggregate: boolean;
+    jsonLogic: any;
+    name: string;
+  }> | null;
+};
+
+export type ScenarioQueryVariables = Exact<{
+  scenarioId: Scalars['ID']['input'];
+}>;
+
+export type ScenarioQuery = {
+  __typename?: 'Query';
+  scenario: {
+    __typename?: 'Scenario';
+    id: string;
+    createdAt: any;
+    isEnabled?: boolean | null;
+    name: string;
+    rules?: Array<{
+      __typename?: 'Rule';
+      id: string;
+      isAggregate: boolean;
+      jsonLogic: any;
+      name: string;
+    }> | null;
+  };
+};
+
+export type ScenariosConnectionQueryVariables = Exact<{
+  ids?: InputMaybe<
+    Array<Scalars['ID']['input']> | Scalars['ID']['input']
+  >;
+  name?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<ScenariosConnectionSortingInput>;
+}>;
+
+export type ScenariosConnectionQuery = {
+  __typename?: 'Query';
+  scenariosConnection: {
+    __typename?: 'ScenariosConnection';
+    count: number;
+    items: Array<{
+      __typename?: 'Scenario';
+      id: string;
+      createdAt: any;
+      isEnabled?: boolean | null;
+      name: string;
+      rules?: Array<{
+        __typename?: 'Rule';
+        id: string;
+        isAggregate: boolean;
+        jsonLogic: any;
+        name: string;
+      }> | null;
+    }>;
+  };
+};
+
+export type CreateScenarioMutationVariables = Exact<{
+  input: CreateScenarioInput;
+}>;
+
+export type CreateScenarioMutation = {
+  __typename?: 'Mutation';
+  createScenario: {
+    __typename?: 'Scenario';
+    id: string;
+    createdAt: any;
+    isEnabled?: boolean | null;
+    name: string;
+    rules?: Array<{
+      __typename?: 'Rule';
+      id: string;
+      isAggregate: boolean;
+      jsonLogic: any;
+      name: string;
+    }> | null;
+  };
+};
+
+export type UpdateScenarioMutationVariables = Exact<{
+  updateScenarioId: Scalars['ID']['input'];
+  input: UpdateScenarioInput;
+}>;
+
+export type UpdateScenarioMutation = {
+  __typename?: 'Mutation';
+  updateScenario: {
+    __typename?: 'Scenario';
+    id: string;
+    createdAt: any;
+    isEnabled?: boolean | null;
+    name: string;
+    rules?: Array<{
+      __typename?: 'Rule';
+      id: string;
+      isAggregate: boolean;
+      jsonLogic: any;
+      name: string;
+    }> | null;
+  };
+};
+
+export type DeleteScenarioMutationVariables = Exact<{
+  deleteScenarioId: Scalars['ID']['input'];
+}>;
+
+export type DeleteScenarioMutation = {
+  __typename?: 'Mutation';
+  deleteScenario: {
+    __typename?: 'Scenario';
+    id: string;
+    createdAt: any;
+    isEnabled?: boolean | null;
+    name: string;
+    rules?: Array<{
+      __typename?: 'Rule';
+      id: string;
+      isAggregate: boolean;
+      jsonLogic: any;
+      name: string;
+    }> | null;
+  };
+};
+
 export type TransactionFragmentFragment = {
   __typename?: 'Transaction';
   id: string;
@@ -440,6 +634,20 @@ export const RuleFragmentFragmentDoc = gql`
     isAggregate
     scenarios {
       id
+      name
+    }
+  }
+`;
+export const ScenarioFragmentFragmentDoc = gql`
+  fragment scenarioFragment on Scenario {
+    id
+    createdAt
+    isEnabled
+    name
+    rules {
+      id
+      isAggregate
+      jsonLogic
       name
     }
   }
@@ -793,6 +1001,350 @@ export type DeleteRuleMutationOptions =
   Apollo.BaseMutationOptions<
     DeleteRuleMutation,
     DeleteRuleMutationVariables
+  >;
+export const ScenarioDocument = gql`
+  query Scenario($scenarioId: ID!) {
+    scenario(id: $scenarioId) {
+      ...scenarioFragment
+    }
+  }
+  ${ScenarioFragmentFragmentDoc}
+`;
+
+/**
+ * __useScenarioQuery__
+ *
+ * To run a query within a React component, call `useScenarioQuery` and pass it any options that fit your needs.
+ * When your component renders, `useScenarioQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useScenarioQuery({
+ *   variables: {
+ *      scenarioId: // value for 'scenarioId'
+ *   },
+ * });
+ */
+export function useScenarioQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ScenarioQuery,
+    ScenarioQueryVariables
+  > &
+    (
+      | {
+          variables: ScenarioQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ScenarioQuery,
+    ScenarioQueryVariables
+  >(ScenarioDocument, options);
+}
+export function useScenarioLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ScenarioQuery,
+    ScenarioQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ScenarioQuery,
+    ScenarioQueryVariables
+  >(ScenarioDocument, options);
+}
+export function useScenarioSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        ScenarioQuery,
+        ScenarioQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    ScenarioQuery,
+    ScenarioQueryVariables
+  >(ScenarioDocument, options);
+}
+export type ScenarioQueryHookResult = ReturnType<
+  typeof useScenarioQuery
+>;
+export type ScenarioLazyQueryHookResult = ReturnType<
+  typeof useScenarioLazyQuery
+>;
+export type ScenarioSuspenseQueryHookResult = ReturnType<
+  typeof useScenarioSuspenseQuery
+>;
+export type ScenarioQueryResult = Apollo.QueryResult<
+  ScenarioQuery,
+  ScenarioQueryVariables
+>;
+export const ScenariosConnectionDocument = gql`
+  query ScenariosConnection(
+    $ids: [ID!]
+    $name: String
+    $limit: Int
+    $offset: Int
+    $sorting: ScenariosConnectionSortingInput
+  ) {
+    scenariosConnection(ids: $ids, name: $name) {
+      count
+      items(
+        limit: $limit
+        offset: $offset
+        sorting: $sorting
+      ) {
+        ...scenarioFragment
+      }
+    }
+  }
+  ${ScenarioFragmentFragmentDoc}
+`;
+
+/**
+ * __useScenariosConnectionQuery__
+ *
+ * To run a query within a React component, call `useScenariosConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useScenariosConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useScenariosConnectionQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *      name: // value for 'name'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sorting: // value for 'sorting'
+ *   },
+ * });
+ */
+export function useScenariosConnectionQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ScenariosConnectionQuery,
+    ScenariosConnectionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ScenariosConnectionQuery,
+    ScenariosConnectionQueryVariables
+  >(ScenariosConnectionDocument, options);
+}
+export function useScenariosConnectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ScenariosConnectionQuery,
+    ScenariosConnectionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ScenariosConnectionQuery,
+    ScenariosConnectionQueryVariables
+  >(ScenariosConnectionDocument, options);
+}
+export function useScenariosConnectionSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        ScenariosConnectionQuery,
+        ScenariosConnectionQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    ScenariosConnectionQuery,
+    ScenariosConnectionQueryVariables
+  >(ScenariosConnectionDocument, options);
+}
+export type ScenariosConnectionQueryHookResult = ReturnType<
+  typeof useScenariosConnectionQuery
+>;
+export type ScenariosConnectionLazyQueryHookResult =
+  ReturnType<typeof useScenariosConnectionLazyQuery>;
+export type ScenariosConnectionSuspenseQueryHookResult =
+  ReturnType<typeof useScenariosConnectionSuspenseQuery>;
+export type ScenariosConnectionQueryResult =
+  Apollo.QueryResult<
+    ScenariosConnectionQuery,
+    ScenariosConnectionQueryVariables
+  >;
+export const CreateScenarioDocument = gql`
+  mutation CreateScenario($input: CreateScenarioInput!) {
+    createScenario(input: $input) {
+      ...scenarioFragment
+    }
+  }
+  ${ScenarioFragmentFragmentDoc}
+`;
+export type CreateScenarioMutationFn =
+  Apollo.MutationFunction<
+    CreateScenarioMutation,
+    CreateScenarioMutationVariables
+  >;
+
+/**
+ * __useCreateScenarioMutation__
+ *
+ * To run a mutation, you first call `useCreateScenarioMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateScenarioMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createScenarioMutation, { data, loading, error }] = useCreateScenarioMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateScenarioMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateScenarioMutation,
+    CreateScenarioMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateScenarioMutation,
+    CreateScenarioMutationVariables
+  >(CreateScenarioDocument, options);
+}
+export type CreateScenarioMutationHookResult = ReturnType<
+  typeof useCreateScenarioMutation
+>;
+export type CreateScenarioMutationResult =
+  Apollo.MutationResult<CreateScenarioMutation>;
+export type CreateScenarioMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateScenarioMutation,
+    CreateScenarioMutationVariables
+  >;
+export const UpdateScenarioDocument = gql`
+  mutation UpdateScenario(
+    $updateScenarioId: ID!
+    $input: UpdateScenarioInput!
+  ) {
+    updateScenario(id: $updateScenarioId, input: $input) {
+      ...scenarioFragment
+    }
+  }
+  ${ScenarioFragmentFragmentDoc}
+`;
+export type UpdateScenarioMutationFn =
+  Apollo.MutationFunction<
+    UpdateScenarioMutation,
+    UpdateScenarioMutationVariables
+  >;
+
+/**
+ * __useUpdateScenarioMutation__
+ *
+ * To run a mutation, you first call `useUpdateScenarioMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateScenarioMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateScenarioMutation, { data, loading, error }] = useUpdateScenarioMutation({
+ *   variables: {
+ *      updateScenarioId: // value for 'updateScenarioId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateScenarioMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateScenarioMutation,
+    UpdateScenarioMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateScenarioMutation,
+    UpdateScenarioMutationVariables
+  >(UpdateScenarioDocument, options);
+}
+export type UpdateScenarioMutationHookResult = ReturnType<
+  typeof useUpdateScenarioMutation
+>;
+export type UpdateScenarioMutationResult =
+  Apollo.MutationResult<UpdateScenarioMutation>;
+export type UpdateScenarioMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateScenarioMutation,
+    UpdateScenarioMutationVariables
+  >;
+export const DeleteScenarioDocument = gql`
+  mutation DeleteScenario($deleteScenarioId: ID!) {
+    deleteScenario(id: $deleteScenarioId) {
+      ...scenarioFragment
+    }
+  }
+  ${ScenarioFragmentFragmentDoc}
+`;
+export type DeleteScenarioMutationFn =
+  Apollo.MutationFunction<
+    DeleteScenarioMutation,
+    DeleteScenarioMutationVariables
+  >;
+
+/**
+ * __useDeleteScenarioMutation__
+ *
+ * To run a mutation, you first call `useDeleteScenarioMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteScenarioMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteScenarioMutation, { data, loading, error }] = useDeleteScenarioMutation({
+ *   variables: {
+ *      deleteScenarioId: // value for 'deleteScenarioId'
+ *   },
+ * });
+ */
+export function useDeleteScenarioMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteScenarioMutation,
+    DeleteScenarioMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteScenarioMutation,
+    DeleteScenarioMutationVariables
+  >(DeleteScenarioDocument, options);
+}
+export type DeleteScenarioMutationHookResult = ReturnType<
+  typeof useDeleteScenarioMutation
+>;
+export type DeleteScenarioMutationResult =
+  Apollo.MutationResult<DeleteScenarioMutation>;
+export type DeleteScenarioMutationOptions =
+  Apollo.BaseMutationOptions<
+    DeleteScenarioMutation,
+    DeleteScenarioMutationVariables
   >;
 export const TransactionDocument = gql`
   query Transaction($getTransactionByIdId: ID!) {

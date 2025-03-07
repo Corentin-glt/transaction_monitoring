@@ -49,6 +49,12 @@ export interface CreateRuleInput {
   name: Scalars['String']['input'];
 }
 
+export interface CreateScenarioInput {
+  isEnabled: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
+  ruleIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+}
+
 export interface CreateTransactionInput {
   amount: Scalars['Float']['input'];
   currency?: InputMaybe<Scalars['Currency']['input']>;
@@ -65,14 +71,21 @@ export interface CreateTransactionsInput {
 export interface Mutation {
   __typename?: 'Mutation';
   createRule: Rule;
+  createScenario: Scenario;
   createTransaction: Transaction;
   createTransactions: BulkInsertTransaction;
   deleteRule: Rule;
+  deleteScenario: Scenario;
   updateRule: Rule;
+  updateScenario: Scenario;
 }
 
 export interface MutationCreateRuleArgs {
   input: CreateRuleInput;
+}
+
+export interface MutationCreateScenarioArgs {
+  input: CreateScenarioInput;
 }
 
 export interface MutationCreateTransactionArgs {
@@ -87,15 +100,26 @@ export interface MutationDeleteRuleArgs {
   id: Scalars['ID']['input'];
 }
 
+export interface MutationDeleteScenarioArgs {
+  id: Scalars['ID']['input'];
+}
+
 export interface MutationUpdateRuleArgs {
   id: Scalars['ID']['input'];
   input: UpdateRuleInput;
+}
+
+export interface MutationUpdateScenarioArgs {
+  id: Scalars['ID']['input'];
+  input: UpdateScenarioInput;
 }
 
 export interface Query {
   __typename?: 'Query';
   rule: Rule;
   rulesConnection: RulesConnection;
+  scenario: Scenario;
+  scenariosConnection: ScenariosConnection;
   transaction: Transaction;
   transactionsConnection: TransactionsConnection;
 }
@@ -105,6 +129,15 @@ export interface QueryRuleArgs {
 }
 
 export interface QueryRulesConnectionArgs {
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+}
+
+export interface QueryScenarioArgs {
+  id: Scalars['ID']['input'];
+}
+
+export interface QueryScenariosConnectionArgs {
   ids?: InputMaybe<Array<Scalars['ID']['input']>>;
   name?: InputMaybe<Scalars['String']['input']>;
 }
@@ -152,8 +185,27 @@ export interface RulesConnectionSortingInput {
 
 export interface Scenario {
   __typename?: 'Scenario';
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
+  isEnabled?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
+  rules?: Maybe<Array<Rule>>;
+}
+
+export interface ScenariosConnection {
+  __typename?: 'ScenariosConnection';
+  count: Scalars['Int']['output'];
+  items: Array<Scenario>;
+}
+
+export interface ScenariosConnectionItemsArgs {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<ScenariosConnectionSortingInput>;
+}
+
+export interface ScenariosConnectionSortingInput {
+  createdAt?: InputMaybe<SortingEnum>;
 }
 
 export enum SortingEnum {
@@ -197,4 +249,10 @@ export interface UpdateRuleInput {
   scenarioIds?: InputMaybe<
     Array<Scalars['String']['input']>
   >;
+}
+
+export interface UpdateScenarioInput {
+  isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  ruleIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 }

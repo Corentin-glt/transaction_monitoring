@@ -1,0 +1,58 @@
+fragment scenarioFragment on Scenario {
+  id
+  createdAt
+  isEnabled
+  name
+  rules {
+    id
+    isAggregate
+    jsonLogic
+    name
+  }
+}
+
+query Scenario($scenarioId: ID!) {
+  scenario(id: $scenarioId) {
+    ...scenarioFragment
+  }
+}
+
+query ScenariosConnection(
+  $ids: [ID!]
+  $name: String
+  $limit: Int
+  $offset: Int
+  $sorting: ScenariosConnectionSortingInput
+) {
+  scenariosConnection(ids: $ids, name: $name) {
+    count
+    items(
+      limit: $limit
+      offset: $offset
+      sorting: $sorting
+    ) {
+      ...scenarioFragment
+    }
+  }
+}
+
+mutation CreateScenario($input: CreateScenarioInput!) {
+  createScenario(input: $input) {
+    ...scenarioFragment
+  }
+}
+
+mutation UpdateScenario(
+  $updateScenarioId: ID!
+  $input: UpdateScenarioInput!
+) {
+  updateScenario(id: $updateScenarioId, input: $input) {
+    ...scenarioFragment
+  }
+}
+
+mutation DeleteScenario($deleteScenarioId: ID!) {
+  deleteScenario(id: $deleteScenarioId) {
+    ...scenarioFragment
+  }
+}
