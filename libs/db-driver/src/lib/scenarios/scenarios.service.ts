@@ -36,6 +36,8 @@ interface UpdateScenarioParams
   ruleIds?: string[];
 }
 
+export type ScenarioEntity = Scenario;
+
 @Injectable()
 export class ScenariosDbService {
   constructor(
@@ -141,5 +143,11 @@ export class ScenariosDbService {
       .scenarioRules({ select: { rule: true } });
 
     return scenarioRules?.map((s) => s.rule) || null;
+  }
+
+  async deleteScenario(id: string): Promise<Scenario> {
+    return this.prismaService.scenario.delete({
+      where: { id },
+    });
   }
 }

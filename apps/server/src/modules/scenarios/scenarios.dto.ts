@@ -9,70 +9,63 @@ import {
 import { SortingEnum } from '@transaction-monitoring/graphql-interface';
 import { Sorting } from '@transaction-monitoring/interface';
 import { IsNumber, Min } from 'class-validator';
-import GraphQLJSON from 'graphql-type-json';
 
-import { Scenario } from '../scenarios/scenarios.dto';
+import { Rule } from '../rules/rules.dto';
 
 @ObjectType()
-export class Rule {
+export class Scenario {
   @Field(() => ID)
   public id: string;
 
   @Field(() => String)
   public name: string;
 
-  @Field(() => [Scenario], { nullable: true })
-  public scenarios?: Scenario[];
+  @Field(() => Boolean, { nullable: true })
+  public isEnabled?: boolean;
 
-  @Field(() => GraphQLJSON)
-  public jsonLogic: any;
-
-  @Field(() => Boolean)
-  public isAggregate: boolean;
+  @Field(() => [Rule], { nullable: true })
+  public rules?: Rule[];
 
   @Field(() => Date)
   public createdAt: Date;
 }
 
 @InputType()
-export class CreateRuleInput {
+export class CreateScenarioInput {
   @Field(() => String)
   public name: string;
 
-  @Field(() => GraphQLJSON)
-  public jsonLogic: any;
-
   @Field(() => Boolean)
-  public isAggregate: boolean;
+  public isEnabled: boolean;
+
+  @Field(() => [ID], { nullable: true })
+  public ruleIds?: string[];
 }
 
 @InputType()
-export class UpdateRuleInput {
+export class UpdateScenarioInput {
   @Field(() => String, { nullable: true })
   public name?: string;
 
-  @Field(() => GraphQLJSON, { nullable: true })
-  public jsonLogic?: any;
-
   @Field(() => Boolean, { nullable: true })
-  public isAggregate?: boolean;
+  public isEnabled?: boolean;
 
-  @Field(() => [String], { nullable: true })
-  public scenarioIds?: string[];
+  @Field(() => [ID], { nullable: true })
+  public ruleIds?: string[];
 }
 
 // RULES CONNECTION
 @ObjectType()
-export class RulesConnection {
-  @Field(() => [Rule])
-  items: Rule[];
+export class ScenariosConnection {
+  @Field(() => [Scenario])
+  items: Scenario[];
 
   @Field(() => Int)
   count: number;
 }
 
 @ArgsType()
-export class RulesConnectionArgs {
+export class ScenariosConnectionArgs {
   @Field(() => [ID], { nullable: true })
   public ids?: string[];
 
@@ -81,13 +74,13 @@ export class RulesConnectionArgs {
 }
 
 @InputType()
-export class RulesConnectionSortingInput {
+export class ScenariosConnectionSortingInput {
   @Field(() => SortingEnum, { nullable: true })
   public createdAt?: Sorting;
 }
 
 @ArgsType()
-export class RulesConnectionItemsArgs {
+export class ScenariosConnectionItemsArgs {
   @Field(() => Int, { nullable: true })
   @IsNumber()
   @Min(1)
@@ -98,8 +91,8 @@ export class RulesConnectionItemsArgs {
   @Min(0)
   public offset?: number;
 
-  @Field(() => RulesConnectionSortingInput, {
+  @Field(() => ScenariosConnectionSortingInput, {
     nullable: true,
   })
-  public sorting?: RulesConnectionSortingInput;
+  public sorting?: ScenariosConnectionSortingInput;
 }

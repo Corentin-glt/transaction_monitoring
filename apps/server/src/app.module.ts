@@ -8,11 +8,13 @@ import { CoreModule } from '@transaction-monitoring/core';
 
 import { GraphQLModuleConfigService } from './graphql.service';
 import { RulesModule } from './modules/rules/rules.module';
+import { ScenariosModule } from './modules/scenarios/scenarios.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 
 const applicationModules = [
   TransactionsModule,
   RulesModule,
+  ScenariosModule,
 ];
 
 @Module({

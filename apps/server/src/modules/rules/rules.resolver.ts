@@ -14,10 +14,10 @@ import {
   RulesConnection,
   RulesConnectionArgs,
   RulesConnectionItemsArgs,
-  Scenario,
   UpdateRuleInput,
 } from './rules.dto';
 import { RulesService } from './rules.service';
+import { Scenario } from '../scenarios/scenarios.dto';
 
 @Resolver(() => Rule)
 export class RulesResolver {
@@ -54,10 +54,10 @@ export class RulesResolver {
   ) {
     return this.rulesService.updateRule(id, input);
   }
-  
+
   @Mutation(() => Rule)
   async deleteRule(
-    @Args('id', { type: () => ID }) id: string,
+    @Args('id', { type: () => ID }) id: string
   ) {
     return this.rulesService.deleteRule(id);
   }
