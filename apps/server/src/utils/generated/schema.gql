@@ -12,6 +12,12 @@ input CreateRuleInput {
   name: String!
 }
 
+input CreateScenarioInput {
+  isEnabled: Boolean!
+  name: String!
+  ruleIds: [ID!]
+}
+
 input CreateTransactionInput {
   amount: Float!
   currency: Currency
@@ -40,15 +46,20 @@ scalar JSON
 
 type Mutation {
   createRule(input: CreateRuleInput!): Rule!
+  createScenario(input: CreateScenarioInput!): Scenario!
   createTransaction(input: CreateTransactionInput!): Transaction!
   createTransactions(input: CreateTransactionsInput!): BulkInsertTransaction!
   deleteRule(id: ID!): Rule!
+  deleteScenario(id: ID!): Scenario!
   updateRule(id: ID!, input: UpdateRuleInput!): Rule!
+  updateScenario(id: ID!, input: UpdateScenarioInput!): Scenario!
 }
 
 type Query {
   rule(id: ID!): Rule!
   rulesConnection(ids: [ID!], name: String): RulesConnection!
+  scenario(id: ID!): Scenario!
+  scenariosConnection(ids: [ID!], name: String): ScenariosConnection!
   transaction(id: ID!): Transaction!
   transactionsConnection(amount: Float, currency: Currency, externalIds: [String!], ids: [String!], sourceAccount: String, targetAccount: String): TransactionsConnection!
 }
@@ -72,8 +83,20 @@ input RulesConnectionSortingInput {
 }
 
 type Scenario {
+  createdAt: DateTime!
   id: ID!
+  isEnabled: Boolean
   name: String!
+  rules: [Rule!]
+}
+
+type ScenariosConnection {
+  count: Int!
+  items(limit: Int, offset: Int, sorting: ScenariosConnectionSortingInput): [Scenario!]!
+}
+
+input ScenariosConnectionSortingInput {
+  createdAt: SortingEnum
 }
 
 enum SortingEnum {
@@ -107,4 +130,10 @@ input UpdateRuleInput {
   jsonLogic: JSON
   name: String
   scenarioIds: [String!]
+}
+
+input UpdateScenarioInput {
+  isEnabled: Boolean
+  name: String
+  ruleIds: [ID!]
 }

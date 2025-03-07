@@ -65,9 +65,7 @@ export class ScenariosResolver {
   }
 
   @ResolveField('rules')
-  async scenarios(
-    @Parent() parent: Scenario
-  ): Promise<Rule[]> {
+  async rules(@Parent() parent: Scenario): Promise<Rule[]> {
     return this.scenariosService.getScenarioRules(
       parent.id
     );
