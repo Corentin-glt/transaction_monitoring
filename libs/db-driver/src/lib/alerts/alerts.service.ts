@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import {
   Alert,
+  AlertStatusEnum,
   Prisma,
   Rule,
   Scenario,
   Transaction,
 } from '@prisma/client';
 
-import { PrismaService } from '../prisma.service';
+import {
+  CreateEntityParams,
+  PrismaService,
+} from '../prisma.service';
 
 type SortingOptions = Prisma.AlertOrderByWithRelationInput;
 
@@ -23,7 +27,18 @@ interface GetAlertsOptions {
 
 interface CreateAlertParams {
   scenarioId: string;
-  transactionId: string;
+  ruleId: string;
+  transactionId?: string;
+}
+
+export interface AlertEntity
+  extends Omit<Alert, 'ruleId' | 'scenarioId'> {
+  rule: Rule;
+  scenario: Scenario;
+}
+
+interface UpdateAlertParams {
+  status: AlertStatusEnum;
 }
 
 @Injectable()
@@ -52,37 +67,58 @@ export class AlertsDbService {
 
   async createAlert(
     data: CreateAlertParams
-  ): Promise<Alert> {
+  ): Promise<AlertEntity> {
     return this.prismaService.alert.create({
       data: {
-        transactionAlerts: {
-          create: {
-            transactionId: data.transactionId,
-          },
-        },
+        transactionAlerts: data.transactionId
+          ? {
+              create: {
+                transactionId: data.transactionId,
+              },
+            }
+          : undefined,
         scenario: {
           connect: {
             id: data.scenarioId,
           },
         },
+        rule: {
+          connect: {
+            id: data.ruleId,
+          },
+        },
+      },
+      include: {
+        rule: true,
+        scenario: true,
       },
     });
   }
 
   async updateAlert(
     id: string,
-    data: Prisma.AlertUpdateInput
-  ): Promise<Alert> {
+    data: UpdateAlertParams
+  ): Promise<AlertEntity> {
     return this.prismaService.alert.update({
       where: { id },
       data,
+      include: {
+        rule: true,
+        scenario: true,
+      },
     });
   }
 
-  async getAlertById(id: string): Promise<Alert | null> {
+  async getAlertById(
+    id: string
+  ): Promise<AlertEntity | null> {
     return this.prismaService.alert.findUnique({
       where: {
         id,
+      },
+      include: {
+        rule: true,
+        scenario: true,
       },
     });
   }
@@ -90,12 +126,16 @@ export class AlertsDbService {
   async getAlerts(
     params: GetAlertsParams,
     options?: GetAlertsOptions
-  ): Promise<Alert[]> {
+  ): Promise<AlertEntity[]> {
     return this.prismaService.alert.findMany({
       where: this.#buildWhereParams(params),
       orderBy:
         options?.sorting &&
         this.#buildOrderedBy(options.sorting),
+      include: {
+        rule: true,
+        scenario: true,
+      },
       take: options?.limit || undefined,
       skip: options?.offset || undefined,
     });
@@ -119,19 +159,5 @@ export class AlertsDbService {
       });
 
     return alertAlerts.map((t) => t.transaction);
-  }
-
-  async getAlertRule(id: string): Promise<Scenario> {
-    const scenario = await this.prismaService.alert
-      .findUnique({ where: { id } })
-      .scenario();
-
-    if (!scenario) {
-      throw new Error(
-        'Impossible to find the Rule attached to this Alert'
-      );
-    }
-
-    return scenario;
   }
 }

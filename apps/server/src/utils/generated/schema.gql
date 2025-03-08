@@ -2,6 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Alert {
+  createdAt: DateTime!
+  id: ID!
+  rule: Rule!
+  scenario: Scenario!
+  status: AlertStatus!
+  transactions: [Transaction!]
+}
+
+"""AlertStatus custom scalar type"""
+scalar AlertStatus
+
+type AlertsConnection {
+  count: Int!
+  items(limit: Int, offset: Int, sorting: AlertsConnectionSortingInput): [Alert!]!
+}
+
+input AlertsConnectionSortingInput {
+  createdAt: SortingEnum
+}
+
 type BulkInsertTransaction {
   success: Boolean!
 }
@@ -51,11 +72,14 @@ type Mutation {
   createTransactions(input: CreateTransactionsInput!): BulkInsertTransaction!
   deleteRule(id: ID!): Rule!
   deleteScenario(id: ID!): Scenario!
+  updateAlert(id: ID!, input: UpdateAlertInput!): Alert!
   updateRule(id: ID!, input: UpdateRuleInput!): Rule!
   updateScenario(id: ID!, input: UpdateScenarioInput!): Scenario!
 }
 
 type Query {
+  alert(id: ID!): Alert!
+  alertsConnection(ids: [ID!]): AlertsConnection!
   rule(id: ID!): Rule!
   rulesConnection(ids: [ID!], name: String): RulesConnection!
   scenario(id: ID!): Scenario!
@@ -123,6 +147,10 @@ type TransactionsConnection {
 input TransactionsConnectionSortingInput {
   amount: SortingEnum
   createdAt: SortingEnum
+}
+
+input UpdateAlertInput {
+  status: AlertStatus!
 }
 
 input UpdateRuleInput {

@@ -10,43 +10,41 @@ import {
 import { FunctionComponent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Scenario } from '../../../utils/generated';
+import { Alert } from '../../../utils/generated';
 
-interface ScenariosTableComponentProps {
-  scenarios: Scenario[];
+interface AlertsTableComponentProps {
+  alerts: Alert[];
 }
 
-const ScenariosTableComponent: FunctionComponent<ScenariosTableComponentProps> =
-  function ({ scenarios }) {
+const AlertsTableComponent: FunctionComponent<AlertsTableComponentProps> =
+  function ({ alerts }) {
     const navigate = useNavigate();
     return (
       <Table>
         <TableHead>
           <TableRow>
-            <TableHeader>Name</TableHeader>
             <TableHeader>Creation date</TableHeader>
-            <TableHeader>Rules</TableHeader>
+            <TableHeader>Scenario</TableHeader>
+            <TableHeader>Rule</TableHeader>
+            <TableHeader>Transaction</TableHeader>
             <TableHeader className="text-right">
-              Enabled
+              Status
             </TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
-          {scenarios.map((scenario) => {
+          {alerts.map((alert) => {
             return (
               <TableRow
                 className="hover:cursor-pointer hover:bg-zinc-800"
-                key={scenario.id}
+                key={alert.id}
                 onClick={() =>
-                  navigate(`/scenarios/${scenario.id}`)
+                  navigate(`/alerts/${alert.id}`)
                 }
               >
-                <TableCell className="font-medium">
-                  {scenario.name}
-                </TableCell>
                 <TableCell className="text-sm">
                   {new Date(
-                    scenario.createdAt
+                    alert.createdAt
                   ).toLocaleDateString('en-GB', {
                     day: 'numeric',
                     month: 'long',
@@ -54,19 +52,26 @@ const ScenariosTableComponent: FunctionComponent<ScenariosTableComponentProps> =
                   })}
                 </TableCell>
                 <TableCell>
-                  <div className="flex gap-3">
-                    {scenario.rules?.map((r) => (
-                      <Badge
-                        key={r.id}
-                        color="lime"
-                      >
-                        {r.name}
-                      </Badge>
-                    )) || '-'}
-                  </div>
+                  <Badge color="lime">
+                    {alert.scenario.name}
+                  </Badge>
                 </TableCell>
+                <TableCell>
+                  <Badge color="emerald">
+                    {alert.rule.name}
+                  </Badge>
+                </TableCell>
+                {alert.transactions &&
+                alert.transactions.length > 0 ? (
+                  <TableCell>
+                    {alert.transactions.length}{' '}
+                    transaction(s) that has been affected
+                  </TableCell>
+                ) : (
+                  '-'
+                )}
                 <TableCell className="text-right">
-                  {scenario.isEnabled ? 'Yes' : 'No'}
+                  {alert.status}
                 </TableCell>
               </TableRow>
             );
@@ -76,4 +81,4 @@ const ScenariosTableComponent: FunctionComponent<ScenariosTableComponentProps> =
     );
   };
 
-export default ScenariosTableComponent;
+export default AlertsTableComponent;

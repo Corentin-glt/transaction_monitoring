@@ -105,41 +105,41 @@ export class TransactionsDbService {
     try {
       // Ensures that both the insertion of transactions
       // and their associated alerts are generated.
-      await this.prismaService.$transaction(
-        async (prisma) => {
-          for (const batch of transactionDataChunks) {
-            const insertedTransactions =
-              await this.prismaService.transaction.createManyAndReturn(
-                {
-                  data: batch.map(
-                    ({ alertIds, ...data }) => data
-                  ),
-                }
-              );
+      await this.prismaService.$transaction(async () => {
+        for (const batch of transactionDataChunks) {
+          const insertedTransactions =
+            await this.prismaService.transaction.createManyAndReturn(
+              {
+                data: batch.map(
+                  ({ alertIds, ...data }) => data
+                ),
+              }
+            );
 
-            // Associates each transaction with its corresponding alertIds
-            // to create the transactionAlert entries.
-            const transactionAlerts =
-              insertedTransactions.flatMap(
-                (transaction, index) => {
-                  const alertIds =
-                    batch[index].alertIds || [];
+          // Associates each transaction with its corresponding alertIds
+          // to create the transactionAlert entries.
+          const transactionAlerts =
+            insertedTransactions.flatMap(
+              (transaction, index) => {
+                const alertIds =
+                  batch[index].alertIds || [];
 
-                  return alertIds.map((alertId) => ({
-                    transactionId: transaction.id,
-                    alertId,
-                  }));
-                }
-              );
+                return alertIds.map((alertId) => ({
+                  transactionId: transaction.id,
+                  alertId,
+                }));
+              }
+            );
 
-            if (transactionAlerts.length > 0) {
-              await prisma.transactionAlert.createMany({
+          if (transactionAlerts.length > 0) {
+            await this.prismaService.transactionAlert.createMany(
+              {
                 data: transactionAlerts,
-              });
-            }
+              }
+            );
           }
         }
-      );
+      });
 
       return { success: true };
     } catch (error) {

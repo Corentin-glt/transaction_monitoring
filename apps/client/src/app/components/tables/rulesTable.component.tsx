@@ -35,9 +35,11 @@ const RulesTableComponent: FunctionComponent<RulesTableComponentProps> =
           {rules.map((rule) => {
             return (
               <TableRow
-                className="hover:cursor-pointer hover:bg-zinc-400"
+                className="hover:cursor-pointer hover:bg-zinc-800"
                 key={rule.id}
-                onClick={() => navigate(`/rules/${rule.id}`)}
+                onClick={() =>
+                  navigate(`/rules/${rule.id}`)
+                }
               >
                 <TableCell className="font-medium">
                   {rule.name}
@@ -54,7 +56,12 @@ const RulesTableComponent: FunctionComponent<RulesTableComponentProps> =
                 <TableCell>
                   <div className="flex gap-3">
                     {rule.scenarios?.map((s) => (
-                      <Badge color="lime">{s.name}</Badge>
+                      <Badge
+                        key={s.id}
+                        color="lime"
+                      >
+                        {s.name}
+                      </Badge>
                     )) || '-'}
                   </div>
                 </TableCell>

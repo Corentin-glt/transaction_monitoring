@@ -8,7 +8,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { FieldError, Merge } from 'react-hook-form';
 
 import useComponentVisible from '../../../utils/hooks/useComponentVisible';
 import LoaderComponent from '../loaders.component';
@@ -181,7 +180,7 @@ const MultipleSelectDropDownComponent: FunctionComponent<SelectDropDownProps> =
         </div>
         {error && (
           <p className="text-sm ont-light text-pink-600 leading-6">
-            {error.message}
+            {error}
           </p>
         )}
       </div>

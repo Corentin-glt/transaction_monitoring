@@ -54,6 +54,9 @@ model Alert {
   scenarioId String
   scenario   Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
+  ruleId String
+  rule   Rule   @relation(fields: [ruleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
   transactionAlerts TransactionAlert[]
 
   createdAt DateTime  @default(now())
@@ -67,6 +70,7 @@ model Rule {
   isAggregate Boolean @default(false)
 
   scenarioRules ScenarioRule[]
+  alerts        Alert[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

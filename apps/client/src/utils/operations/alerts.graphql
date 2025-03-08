@@ -1,0 +1,49 @@
+fragment alertFragment on Alert {
+  id
+  status
+  rule {
+    id
+    name
+  }
+  scenario {
+    id
+    name
+  }
+  transactions {
+    id
+  }
+  createdAt
+}
+
+query Alert($alertId: ID!) {
+  alert(id: $alertId) {
+    ...alertFragment
+  }
+}
+
+query AlertsConnection(
+  $ids: [ID!]
+  $limit: Int
+  $offset: Int
+  $sorting: AlertsConnectionSortingInput
+) {
+  alertsConnection(ids: $ids) {
+    count
+    items(
+      limit: $limit
+      offset: $offset
+      sorting: $sorting
+    ) {
+      ...alertFragment
+    }
+  }
+}
+
+mutation UpdateAlert(
+  $updateAlertId: ID!
+  $input: UpdateAlertInput!
+) {
+  updateAlert(id: $updateAlertId, input: $input) {
+    ...alertFragment
+  }
+}

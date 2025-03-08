@@ -9,6 +9,8 @@ import {
   TransactionModel,
 } from '@transaction-monitoring/interface';
 
+import { ApplyScenarioOnBulkTransactionsRule } from '../../rules/applyScenarioOnBulkTransactions.rule';
+
 interface CreateTransactionParams {
   sourceAccount: string;
   targetAccount: string;
@@ -41,7 +43,8 @@ interface SortingOptions {
 @Injectable()
 export class TransactionsService {
   constructor(
-    private readonly transactionsDbService: TransactionsDbService
+    private readonly transactionsDbService: TransactionsDbService,
+    private readonly applyScenariosOnBulkTransactionRules: ApplyScenarioOnBulkTransactionsRule
   ) {}
 
   #buildFormat(
@@ -75,8 +78,13 @@ export class TransactionsService {
   ): Promise<{ success: true }> {
     //TODO: create a RULE in order to check the scenarios and their rules
     // before creating a new transaction. Then attach their alert
+    const transactionsWithAlertIds =
+      await this.applyScenariosOnBulkTransactionRules.ruleApplyScenarioOnBulkTransactions_v1(
+        params
+      );
+      
     return this.transactionsDbService.bulkInsertTransactions(
-      params
+      transactionsWithAlertIds
     );
   }
 

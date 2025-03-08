@@ -30,12 +30,40 @@ export interface Scalars {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  /** AlertStatus custom scalar type */
+  AlertStatus: { input: any; output: any };
   /** Currency custom scalar type */
   Currency: { input: any; output: any };
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any };
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any };
+}
+
+export interface Alert {
+  __typename?: 'Alert';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  rule: Rule;
+  scenario: Scenario;
+  status: Scalars['AlertStatus']['output'];
+  transactions?: Maybe<Array<Transaction>>;
+}
+
+export interface AlertsConnection {
+  __typename?: 'AlertsConnection';
+  count: Scalars['Int']['output'];
+  items: Array<Alert>;
+}
+
+export interface AlertsConnectionItemsArgs {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AlertsConnectionSortingInput>;
+}
+
+export interface AlertsConnectionSortingInput {
+  createdAt?: InputMaybe<SortingEnum>;
 }
 
 export interface BulkInsertTransaction {
@@ -52,7 +80,7 @@ export interface CreateRuleInput {
 export interface CreateScenarioInput {
   isEnabled: Scalars['Boolean']['input'];
   name: Scalars['String']['input'];
-  ruleIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  ruleIds: Array<Scalars['ID']['input']>;
 }
 
 export interface CreateTransactionInput {
@@ -76,6 +104,7 @@ export interface Mutation {
   createTransactions: BulkInsertTransaction;
   deleteRule: Rule;
   deleteScenario: Scenario;
+  updateAlert: Alert;
   updateRule: Rule;
   updateScenario: Scenario;
 }
@@ -104,6 +133,11 @@ export interface MutationDeleteScenarioArgs {
   id: Scalars['ID']['input'];
 }
 
+export interface MutationUpdateAlertArgs {
+  id: Scalars['ID']['input'];
+  input: UpdateAlertInput;
+}
+
 export interface MutationUpdateRuleArgs {
   id: Scalars['ID']['input'];
   input: UpdateRuleInput;
@@ -116,12 +150,22 @@ export interface MutationUpdateScenarioArgs {
 
 export interface Query {
   __typename?: 'Query';
+  alert: Alert;
+  alertsConnection: AlertsConnection;
   rule: Rule;
   rulesConnection: RulesConnection;
   scenario: Scenario;
   scenariosConnection: ScenariosConnection;
   transaction: Transaction;
   transactionsConnection: TransactionsConnection;
+}
+
+export interface QueryAlertArgs {
+  id: Scalars['ID']['input'];
+}
+
+export interface QueryAlertsConnectionArgs {
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
 }
 
 export interface QueryRuleArgs {
@@ -240,6 +284,10 @@ export interface TransactionsConnectionItemsArgs {
 export interface TransactionsConnectionSortingInput {
   amount?: InputMaybe<SortingEnum>;
   createdAt?: InputMaybe<SortingEnum>;
+}
+
+export interface UpdateAlertInput {
+  status: Scalars['AlertStatus']['input'];
 }
 
 export interface UpdateRuleInput {

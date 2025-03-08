@@ -33,12 +33,40 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  /** AlertStatus custom scalar type */
+  AlertStatus: { input: any; output: any };
   /** Currency custom scalar type */
   Currency: { input: any; output: any };
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any };
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any };
+};
+
+export type Alert = {
+  __typename?: 'Alert';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  rule: Rule;
+  scenario: Scenario;
+  status: Scalars['AlertStatus']['output'];
+  transactions?: Maybe<Array<Transaction>>;
+};
+
+export type AlertsConnection = {
+  __typename?: 'AlertsConnection';
+  count: Scalars['Int']['output'];
+  items: Array<Alert>;
+};
+
+export type AlertsConnectionItemsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AlertsConnectionSortingInput>;
+};
+
+export type AlertsConnectionSortingInput = {
+  createdAt?: InputMaybe<SortingEnum>;
 };
 
 export type BulkInsertTransaction = {
@@ -55,7 +83,7 @@ export type CreateRuleInput = {
 export type CreateScenarioInput = {
   isEnabled: Scalars['Boolean']['input'];
   name: Scalars['String']['input'];
-  ruleIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  ruleIds: Array<Scalars['ID']['input']>;
 };
 
 export type CreateTransactionInput = {
@@ -79,6 +107,7 @@ export type Mutation = {
   createTransactions: BulkInsertTransaction;
   deleteRule: Rule;
   deleteScenario: Scenario;
+  updateAlert: Alert;
   updateRule: Rule;
   updateScenario: Scenario;
 };
@@ -107,6 +136,11 @@ export type MutationDeleteScenarioArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type MutationUpdateAlertArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateAlertInput;
+};
+
 export type MutationUpdateRuleArgs = {
   id: Scalars['ID']['input'];
   input: UpdateRuleInput;
@@ -119,12 +153,22 @@ export type MutationUpdateScenarioArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  alert: Alert;
+  alertsConnection: AlertsConnection;
   rule: Rule;
   rulesConnection: RulesConnection;
   scenario: Scenario;
   scenariosConnection: ScenariosConnection;
   transaction: Transaction;
   transactionsConnection: TransactionsConnection;
+};
+
+export type QueryAlertArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type QueryAlertsConnectionArgs = {
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type QueryRuleArgs = {
@@ -245,6 +289,10 @@ export type TransactionsConnectionSortingInput = {
   createdAt?: InputMaybe<SortingEnum>;
 };
 
+export type UpdateAlertInput = {
+  status: Scalars['AlertStatus']['input'];
+};
+
 export type UpdateRuleInput = {
   isAggregate?: InputMaybe<Scalars['Boolean']['input']>;
   jsonLogic?: InputMaybe<Scalars['JSON']['input']>;
@@ -258,6 +306,109 @@ export type UpdateScenarioInput = {
   isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   ruleIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
+export type AlertFragmentFragment = {
+  __typename?: 'Alert';
+  id: string;
+  status: any;
+  createdAt: any;
+  rule: { __typename?: 'Rule'; id: string; name: string };
+  scenario: {
+    __typename?: 'Scenario';
+    id: string;
+    name: string;
+  };
+  transactions?: Array<{
+    __typename?: 'Transaction';
+    id: string;
+  }> | null;
+};
+
+export type AlertQueryVariables = Exact<{
+  alertId: Scalars['ID']['input'];
+}>;
+
+export type AlertQuery = {
+  __typename?: 'Query';
+  alert: {
+    __typename?: 'Alert';
+    id: string;
+    status: any;
+    createdAt: any;
+    rule: { __typename?: 'Rule'; id: string; name: string };
+    scenario: {
+      __typename?: 'Scenario';
+      id: string;
+      name: string;
+    };
+    transactions?: Array<{
+      __typename?: 'Transaction';
+      id: string;
+    }> | null;
+  };
+};
+
+export type AlertsConnectionQueryVariables = Exact<{
+  ids?: InputMaybe<
+    Array<Scalars['ID']['input']> | Scalars['ID']['input']
+  >;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  sorting?: InputMaybe<AlertsConnectionSortingInput>;
+}>;
+
+export type AlertsConnectionQuery = {
+  __typename?: 'Query';
+  alertsConnection: {
+    __typename?: 'AlertsConnection';
+    count: number;
+    items: Array<{
+      __typename?: 'Alert';
+      id: string;
+      status: any;
+      createdAt: any;
+      rule: {
+        __typename?: 'Rule';
+        id: string;
+        name: string;
+      };
+      scenario: {
+        __typename?: 'Scenario';
+        id: string;
+        name: string;
+      };
+      transactions?: Array<{
+        __typename?: 'Transaction';
+        id: string;
+      }> | null;
+    }>;
+  };
+};
+
+export type UpdateAlertMutationVariables = Exact<{
+  updateAlertId: Scalars['ID']['input'];
+  input: UpdateAlertInput;
+}>;
+
+export type UpdateAlertMutation = {
+  __typename?: 'Mutation';
+  updateAlert: {
+    __typename?: 'Alert';
+    id: string;
+    status: any;
+    createdAt: any;
+    rule: { __typename?: 'Rule'; id: string; name: string };
+    scenario: {
+      __typename?: 'Scenario';
+      id: string;
+      name: string;
+    };
+    transactions?: Array<{
+      __typename?: 'Transaction';
+      id: string;
+    }> | null;
+  };
 };
 
 export type RuleFragmentFragment = {
@@ -625,6 +776,24 @@ export type CreateTransactionMutation = {
   };
 };
 
+export const AlertFragmentFragmentDoc = gql`
+  fragment alertFragment on Alert {
+    id
+    status
+    rule {
+      id
+      name
+    }
+    scenario {
+      id
+      name
+    }
+    transactions {
+      id
+    }
+    createdAt
+  }
+`;
 export const RuleFragmentFragmentDoc = gql`
   fragment ruleFragment on Rule {
     id
@@ -664,6 +833,238 @@ export const TransactionFragmentFragmentDoc = gql`
     targetAccount
   }
 `;
+export const AlertDocument = gql`
+  query Alert($alertId: ID!) {
+    alert(id: $alertId) {
+      ...alertFragment
+    }
+  }
+  ${AlertFragmentFragmentDoc}
+`;
+
+/**
+ * __useAlertQuery__
+ *
+ * To run a query within a React component, call `useAlertQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAlertQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAlertQuery({
+ *   variables: {
+ *      alertId: // value for 'alertId'
+ *   },
+ * });
+ */
+export function useAlertQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AlertQuery,
+    AlertQueryVariables
+  > &
+    (
+      | { variables: AlertQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<AlertQuery, AlertQueryVariables>(
+    AlertDocument,
+    options
+  );
+}
+export function useAlertLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AlertQuery,
+    AlertQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    AlertQuery,
+    AlertQueryVariables
+  >(AlertDocument, options);
+}
+export function useAlertSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        AlertQuery,
+        AlertQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    AlertQuery,
+    AlertQueryVariables
+  >(AlertDocument, options);
+}
+export type AlertQueryHookResult = ReturnType<
+  typeof useAlertQuery
+>;
+export type AlertLazyQueryHookResult = ReturnType<
+  typeof useAlertLazyQuery
+>;
+export type AlertSuspenseQueryHookResult = ReturnType<
+  typeof useAlertSuspenseQuery
+>;
+export type AlertQueryResult = Apollo.QueryResult<
+  AlertQuery,
+  AlertQueryVariables
+>;
+export const AlertsConnectionDocument = gql`
+  query AlertsConnection(
+    $ids: [ID!]
+    $limit: Int
+    $offset: Int
+    $sorting: AlertsConnectionSortingInput
+  ) {
+    alertsConnection(ids: $ids) {
+      count
+      items(
+        limit: $limit
+        offset: $offset
+        sorting: $sorting
+      ) {
+        ...alertFragment
+      }
+    }
+  }
+  ${AlertFragmentFragmentDoc}
+`;
+
+/**
+ * __useAlertsConnectionQuery__
+ *
+ * To run a query within a React component, call `useAlertsConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAlertsConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAlertsConnectionQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sorting: // value for 'sorting'
+ *   },
+ * });
+ */
+export function useAlertsConnectionQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    AlertsConnectionQuery,
+    AlertsConnectionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    AlertsConnectionQuery,
+    AlertsConnectionQueryVariables
+  >(AlertsConnectionDocument, options);
+}
+export function useAlertsConnectionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AlertsConnectionQuery,
+    AlertsConnectionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    AlertsConnectionQuery,
+    AlertsConnectionQueryVariables
+  >(AlertsConnectionDocument, options);
+}
+export function useAlertsConnectionSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        AlertsConnectionQuery,
+        AlertsConnectionQueryVariables
+      >
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    AlertsConnectionQuery,
+    AlertsConnectionQueryVariables
+  >(AlertsConnectionDocument, options);
+}
+export type AlertsConnectionQueryHookResult = ReturnType<
+  typeof useAlertsConnectionQuery
+>;
+export type AlertsConnectionLazyQueryHookResult =
+  ReturnType<typeof useAlertsConnectionLazyQuery>;
+export type AlertsConnectionSuspenseQueryHookResult =
+  ReturnType<typeof useAlertsConnectionSuspenseQuery>;
+export type AlertsConnectionQueryResult =
+  Apollo.QueryResult<
+    AlertsConnectionQuery,
+    AlertsConnectionQueryVariables
+  >;
+export const UpdateAlertDocument = gql`
+  mutation UpdateAlert(
+    $updateAlertId: ID!
+    $input: UpdateAlertInput!
+  ) {
+    updateAlert(id: $updateAlertId, input: $input) {
+      ...alertFragment
+    }
+  }
+  ${AlertFragmentFragmentDoc}
+`;
+export type UpdateAlertMutationFn = Apollo.MutationFunction<
+  UpdateAlertMutation,
+  UpdateAlertMutationVariables
+>;
+
+/**
+ * __useUpdateAlertMutation__
+ *
+ * To run a mutation, you first call `useUpdateAlertMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAlertMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAlertMutation, { data, loading, error }] = useUpdateAlertMutation({
+ *   variables: {
+ *      updateAlertId: // value for 'updateAlertId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateAlertMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateAlertMutation,
+    UpdateAlertMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateAlertMutation,
+    UpdateAlertMutationVariables
+  >(UpdateAlertDocument, options);
+}
+export type UpdateAlertMutationHookResult = ReturnType<
+  typeof useUpdateAlertMutation
+>;
+export type UpdateAlertMutationResult =
+  Apollo.MutationResult<UpdateAlertMutation>;
+export type UpdateAlertMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateAlertMutation,
+    UpdateAlertMutationVariables
+  >;
 export const RuleDocument = gql`
   query Rule($ruleId: ID!) {
     rule(id: $ruleId) {

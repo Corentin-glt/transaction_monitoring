@@ -52,7 +52,7 @@ const SwitchFieldComponent: FunctionComponent<SwitchFieldProps> =
               type="button"
               onClick={() => onChange(!value)}
               className={`relative w-10 h-6 flex items-center rounded-full p-1 transition-all border border-950/10 duration-300 shadow-inner ${
-                value ? 'bg-gray-600' : 'bg-zinc-950/50'
+                value ? 'bg-badoit' : 'bg-zinc-950/50'
               }`}
             >
               <div

@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Rule, Scenario } from '@prisma/client';
+import {
+  Prisma,
+  Rule,
+  Scenario,
+  ScenarioRule,
+} from '@prisma/client';
 
 import {
   CreateEntityParams,
@@ -12,9 +17,12 @@ type SortingOptions =
 
 interface GetScenariosParams {
   ids?: string[];
+  isEnabled?: boolean;
 }
 
 interface GetScenariosOptions {
+  include?: Prisma.ScenarioInclude;
+  select?: Prisma.ScenarioSelect;
   limit?: number;
   offset?: number;
   sorting?: SortingOptions;
@@ -36,7 +44,13 @@ interface UpdateScenarioParams
   ruleIds?: string[];
 }
 
-export type ScenarioEntity = Scenario;
+interface ScenarioRuleEntity extends ScenarioRule {
+  rule?: Rule;
+}
+
+export interface ScenarioEntity extends Scenario {
+  scenarioRules?: ScenarioRuleEntity[];
+}
 
 @Injectable()
 export class ScenariosDbService {
@@ -49,6 +63,7 @@ export class ScenariosDbService {
   ): Prisma.ScenarioWhereInput {
     return {
       id: { in: params.ids },
+      isEnabled: params.isEnabled,
     };
   }
 
@@ -116,12 +131,13 @@ export class ScenariosDbService {
   async getScenarios(
     params: GetScenariosParams,
     options?: GetScenariosOptions
-  ): Promise<Scenario[]> {
+  ): Promise<ScenarioEntity[]> {
     return this.prismaService.scenario.findMany({
       where: this.#buildWhereParams(params),
       orderBy:
         options?.sorting &&
         this.#buildOrderedBy(options.sorting),
+      include: options?.include,
       take: options?.limit || undefined,
       skip: options?.offset || undefined,
     });

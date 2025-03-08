@@ -7,7 +7,10 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GqlOptionsFactory } from '@nestjs/graphql';
 import { EnvironmentVariables } from '@transaction-monitoring/core';
-import { CurrencyScalar } from '@transaction-monitoring/graphql-interface';
+import {
+  AlertStatusScalar,
+  CurrencyScalar,
+} from '@transaction-monitoring/graphql-interface';
 import GraphQLJSON from 'graphql-type-json';
 
 @Injectable()
@@ -43,6 +46,10 @@ export class GraphQLModuleConfigService
           {
             type: () => 'Currency',
             scalar: CurrencyScalar,
+          },
+          {
+            type: () => 'AlertStatus',
+            scalar: AlertStatusScalar,
           },
           {
             type: () => JSON,
