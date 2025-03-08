@@ -7,10 +7,23 @@ fragment transactionFragment on Transaction {
   metadata
   sourceAccount
   targetAccount
+  alerts {
+    id
+    status
+    rule {
+      id
+      name
+    }
+    scenario {
+      id
+      name
+    }
+    createdAt
+  }
 }
 
-query Transaction($getTransactionByIdId: ID!) {
-  transaction(id: $getTransactionByIdId) {
+query Transaction($transactionId: ID!) {
+  transaction(id: $transactionId) {
     ...transactionFragment
   }
 }

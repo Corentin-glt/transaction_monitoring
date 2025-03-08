@@ -7,6 +7,7 @@ import {
   TableRow,
 } from '@transaction-monitoring/client-components';
 import { FunctionComponent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { displayCurrencyType } from '../../../utils/displayCurrency';
 import { Transaction } from '../../../utils/generated';
@@ -17,6 +18,7 @@ interface TransactionsTableComponentProps {
 
 const TransactionsTableComponent: FunctionComponent<TransactionsTableComponentProps> =
   function ({ transactions }) {
+    const navigate = useNavigate();
     return (
       <Table
         dense
@@ -42,7 +44,15 @@ const TransactionsTableComponent: FunctionComponent<TransactionsTableComponentPr
               transaction.currency
             );
             return (
-              <TableRow key={transaction.id}>
+              <TableRow
+                className="hover:cursor-pointer hover:bg-zinc-800"
+                key={transaction.id}
+                onClick={() =>
+                  navigate(
+                    `/transactions/${transaction.id}`
+                  )
+                }
+              >
                 <TableCell className="font-medium">
                   {transaction.sourceAccount}
                 </TableCell>

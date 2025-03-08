@@ -262,6 +262,7 @@ export enum SortingEnum {
 
 export type Transaction = {
   __typename?: 'Transaction';
+  alerts?: Maybe<Array<Alert>>;
   amount: Scalars['Float']['output'];
   createdAt: Scalars['DateTime']['output'];
   currency: Scalars['Currency']['output'];
@@ -322,6 +323,13 @@ export type AlertFragmentFragment = {
   transactions?: Array<{
     __typename?: 'Transaction';
     id: string;
+    amount: number;
+    currency: any;
+    createdAt: any;
+    externalId: string;
+    metadata?: any | null;
+    sourceAccount: string;
+    targetAccount: string;
   }> | null;
 };
 
@@ -345,6 +353,13 @@ export type AlertQuery = {
     transactions?: Array<{
       __typename?: 'Transaction';
       id: string;
+      amount: number;
+      currency: any;
+      createdAt: any;
+      externalId: string;
+      metadata?: any | null;
+      sourceAccount: string;
+      targetAccount: string;
     }> | null;
   };
 };
@@ -381,6 +396,13 @@ export type AlertsConnectionQuery = {
       transactions?: Array<{
         __typename?: 'Transaction';
         id: string;
+        amount: number;
+        currency: any;
+        createdAt: any;
+        externalId: string;
+        metadata?: any | null;
+        sourceAccount: string;
+        targetAccount: string;
       }> | null;
     }>;
   };
@@ -407,6 +429,13 @@ export type UpdateAlertMutation = {
     transactions?: Array<{
       __typename?: 'Transaction';
       id: string;
+      amount: number;
+      currency: any;
+      createdAt: any;
+      externalId: string;
+      metadata?: any | null;
+      sourceAccount: string;
+      targetAccount: string;
     }> | null;
   };
 };
@@ -687,10 +716,22 @@ export type TransactionFragmentFragment = {
   metadata?: any | null;
   sourceAccount: string;
   targetAccount: string;
+  alerts?: Array<{
+    __typename?: 'Alert';
+    id: string;
+    status: any;
+    createdAt: any;
+    rule: { __typename?: 'Rule'; id: string; name: string };
+    scenario: {
+      __typename?: 'Scenario';
+      id: string;
+      name: string;
+    };
+  }> | null;
 };
 
 export type TransactionQueryVariables = Exact<{
-  getTransactionByIdId: Scalars['ID']['input'];
+  transactionId: Scalars['ID']['input'];
 }>;
 
 export type TransactionQuery = {
@@ -705,6 +746,22 @@ export type TransactionQuery = {
     metadata?: any | null;
     sourceAccount: string;
     targetAccount: string;
+    alerts?: Array<{
+      __typename?: 'Alert';
+      id: string;
+      status: any;
+      createdAt: any;
+      rule: {
+        __typename?: 'Rule';
+        id: string;
+        name: string;
+      };
+      scenario: {
+        __typename?: 'Scenario';
+        id: string;
+        name: string;
+      };
+    }> | null;
   };
 };
 
@@ -741,6 +798,22 @@ export type TransactionsConnectionQuery = {
       metadata?: any | null;
       sourceAccount: string;
       targetAccount: string;
+      alerts?: Array<{
+        __typename?: 'Alert';
+        id: string;
+        status: any;
+        createdAt: any;
+        rule: {
+          __typename?: 'Rule';
+          id: string;
+          name: string;
+        };
+        scenario: {
+          __typename?: 'Scenario';
+          id: string;
+          name: string;
+        };
+      }> | null;
     }>;
   };
 };
@@ -773,6 +846,22 @@ export type CreateTransactionMutation = {
     metadata?: any | null;
     sourceAccount: string;
     targetAccount: string;
+    alerts?: Array<{
+      __typename?: 'Alert';
+      id: string;
+      status: any;
+      createdAt: any;
+      rule: {
+        __typename?: 'Rule';
+        id: string;
+        name: string;
+      };
+      scenario: {
+        __typename?: 'Scenario';
+        id: string;
+        name: string;
+      };
+    }> | null;
   };
 };
 
@@ -790,6 +879,13 @@ export const AlertFragmentFragmentDoc = gql`
     }
     transactions {
       id
+      amount
+      currency
+      createdAt
+      externalId
+      metadata
+      sourceAccount
+      targetAccount
     }
     createdAt
   }
@@ -831,6 +927,19 @@ export const TransactionFragmentFragmentDoc = gql`
     metadata
     sourceAccount
     targetAccount
+    alerts {
+      id
+      status
+      rule {
+        id
+        name
+      }
+      scenario {
+        id
+        name
+      }
+      createdAt
+    }
   }
 `;
 export const AlertDocument = gql`
@@ -1748,8 +1857,8 @@ export type DeleteScenarioMutationOptions =
     DeleteScenarioMutationVariables
   >;
 export const TransactionDocument = gql`
-  query Transaction($getTransactionByIdId: ID!) {
-    transaction(id: $getTransactionByIdId) {
+  query Transaction($transactionId: ID!) {
+    transaction(id: $transactionId) {
       ...transactionFragment
     }
   }
@@ -1768,7 +1877,7 @@ export const TransactionDocument = gql`
  * @example
  * const { data, loading, error } = useTransactionQuery({
  *   variables: {
- *      getTransactionByIdId: // value for 'getTransactionByIdId'
+ *      transactionId: // value for 'transactionId'
  *   },
  * });
  */

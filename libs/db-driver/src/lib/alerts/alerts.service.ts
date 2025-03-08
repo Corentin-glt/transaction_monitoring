@@ -152,12 +152,12 @@ export class AlertsDbService {
   async getAlertTransactions(
     id: string
   ): Promise<Transaction[]> {
-    const alertAlerts =
+    const transactionAlerts =
       await this.prismaService.transactionAlert.findMany({
         where: { alertId: id },
         select: { transaction: true },
       });
 
-    return alertAlerts.map((t) => t.transaction);
+    return transactionAlerts.map((t) => t.transaction);
   }
 }

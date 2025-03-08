@@ -18,6 +18,7 @@ import {
   TransactionsConnectionItemsArgs,
 } from './transactions.dto';
 import { TransactionsService } from './transactions.service';
+import { Alert } from '../alerts/alerts.dto';
 
 @Resolver(() => Transaction)
 export class TransactionsResolver {
@@ -61,6 +62,15 @@ export class TransactionsResolver {
   ) {
     return this.transactionsService.bulkInsertTransactions(
       input.transactions
+    );
+  }
+
+  @ResolveField('alerts')
+  async alerts(
+    @Parent() parent: Transaction
+  ): Promise<Alert[]> {
+    return this.transactionsService.getTransactionAlerts(
+      parent.id
     );
   }
 }

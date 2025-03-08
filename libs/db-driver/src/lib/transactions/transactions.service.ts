@@ -7,6 +7,7 @@ import {
 } from '@prisma/client';
 import { chunk } from 'lodash';
 
+import { AlertEntity } from '../alerts/alerts.service';
 import {
   CreateEntityParams,
   PrismaService,
@@ -190,11 +191,20 @@ export class TransactionsDbService {
     });
   }
 
-  async getTransactionAlerts(id: string): Promise<Alert[]> {
+  async getTransactionAlerts(
+    id: string
+  ): Promise<AlertEntity[]> {
     const transactionAlerts =
       await this.prismaService.transactionAlert.findMany({
         where: { transactionId: id },
-        select: { alert: true },
+        select: {
+          alert: {
+            include: {
+              scenario: true,
+              rule: true,
+            },
+          },
+        },
       });
 
     return transactionAlerts.map((t) => t.alert);

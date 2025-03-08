@@ -14,10 +14,11 @@ import { Alert } from '../../../utils/generated';
 
 interface AlertsTableComponentProps {
   alerts: Alert[];
+  disableTransaction?: boolean;
 }
 
 const AlertsTableComponent: FunctionComponent<AlertsTableComponentProps> =
-  function ({ alerts }) {
+  function ({ alerts, disableTransaction = false }) {
     const navigate = useNavigate();
     return (
       <Table>
@@ -26,7 +27,9 @@ const AlertsTableComponent: FunctionComponent<AlertsTableComponentProps> =
             <TableHeader>Creation date</TableHeader>
             <TableHeader>Scenario</TableHeader>
             <TableHeader>Rule</TableHeader>
-            <TableHeader>Transaction</TableHeader>
+            {!disableTransaction && (
+              <TableHeader>Transaction</TableHeader>
+            )}
             <TableHeader className="text-right">
               Status
             </TableHeader>
@@ -61,15 +64,15 @@ const AlertsTableComponent: FunctionComponent<AlertsTableComponentProps> =
                     {alert.rule.name}
                   </Badge>
                 </TableCell>
-                {alert.transactions &&
-                alert.transactions.length > 0 ? (
+                {!disableTransaction && (
                   <TableCell>
-                    {alert.transactions.length}{' '}
-                    transaction(s) that has been affected
+                    {alert.transactions &&
+                    alert.transactions.length > 0
+                      ? `${alert.transactions.length} transaction(s) that has been affected`
+                      : '-'}
                   </TableCell>
-                ) : (
-                  '-'
                 )}
+
                 <TableCell className="text-right">
                   {alert.status}
                 </TableCell>

@@ -11,6 +11,13 @@ fragment alertFragment on Alert {
   }
   transactions {
     id
+    amount
+    currency
+    createdAt
+    externalId
+    metadata
+    sourceAccount
+    targetAccount
   }
   createdAt
 }

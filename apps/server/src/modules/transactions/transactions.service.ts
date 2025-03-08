@@ -4,6 +4,7 @@ import {
   TransactionsDbService,
 } from '@transaction-monitoring/db-driver';
 import {
+  AlertModel,
   Currency,
   Sorting,
   TransactionModel,
@@ -82,7 +83,7 @@ export class TransactionsService {
       await this.applyScenariosOnBulkTransactionRules.ruleApplyScenarioOnBulkTransactions_v1(
         params
       );
-      
+
     return this.transactionsDbService.bulkInsertTransactions(
       transactionsWithAlertIds
     );
@@ -104,6 +105,14 @@ export class TransactionsService {
   async countTransactions(params: FindTransactionsParams) {
     return this.transactionsDbService.getCountTransactions(
       params
+    );
+  }
+
+  async getTransactionAlerts(
+    id: string
+  ): Promise<AlertModel[]> {
+    return this.transactionsDbService.getTransactionAlerts(
+      id
     );
   }
 }

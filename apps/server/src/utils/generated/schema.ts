@@ -259,6 +259,7 @@ export enum SortingEnum {
 
 export interface Transaction {
   __typename?: 'Transaction';
+  alerts?: Maybe<Array<Alert>>;
   amount: Scalars['Float']['output'];
   createdAt: Scalars['DateTime']['output'];
   currency: Scalars['Currency']['output'];

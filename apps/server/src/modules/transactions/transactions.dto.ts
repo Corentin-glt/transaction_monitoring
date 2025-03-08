@@ -10,9 +10,14 @@ import {
   CurrencyScalar,
   SortingEnum,
 } from '@transaction-monitoring/graphql-interface';
-import { Currency, Sorting } from '@transaction-monitoring/interface';
+import {
+  Currency,
+  Sorting,
+} from '@transaction-monitoring/interface';
 import { IsNumber, Min } from 'class-validator';
 import GraphQLJSON from 'graphql-type-json';
+
+import { Alert } from '../alerts/alerts.dto';
 
 @ObjectType()
 export class Transaction {
@@ -33,6 +38,9 @@ export class Transaction {
 
   @Field(() => CurrencyScalar)
   public currency: Currency;
+
+  @Field(() => [Alert], { nullable: true })
+  public alerts?: Alert[];
 
   @Field(() => GraphQLJSON, { nullable: true })
   public metadata?: any;

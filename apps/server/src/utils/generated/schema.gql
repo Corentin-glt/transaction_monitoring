@@ -129,6 +129,7 @@ enum SortingEnum {
 }
 
 type Transaction {
+  alerts: [Alert!]
   amount: Float!
   createdAt: DateTime!
   currency: Currency!
