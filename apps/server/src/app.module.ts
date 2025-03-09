@@ -2,9 +2,14 @@ import {
   ApolloDriver,
   ApolloDriverConfig,
 } from '@nestjs/apollo';
+import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { CoreModule } from '@transaction-monitoring/core';
+import {
+  CoreModule,
+  EnvironmentVariables,
+} from '@transaction-monitoring/core';
 
 import { GraphQLModuleConfigService } from './graphql.service';
 import { AlertsModule } from './modules/alerts/alerts.module';
@@ -25,6 +30,20 @@ const applicationModules = [
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useClass: GraphQLModuleConfigService,
+    }),
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (
+        configService: ConfigService<
+          EnvironmentVariables,
+          true
+        >
+      ) => ({
+        connection: {
+          host: configService.get('hostRedis'),
+          port: configService.get('portRedis'),
+        },
+      }),
     }),
     ...applicationModules,
   ],

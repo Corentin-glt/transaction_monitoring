@@ -9,12 +9,12 @@ import CreateTransactionsForm from '../components/forms/createTransactionsForm.c
 const AddTransactionsPage: FunctionComponent = function () {
   const toast = useToast();
   const navigate = useNavigate();
-  const [createTransactions, { loading }] =
+  const [createTransactions] =
     useCreateTransactionsMutation({
-      onCompleted() {
+      onCompleted(data) {
         toast.open({
           intent: ToastIntent.SUCCESS,
-          title: 'Transactions Bulk done with success',
+          title: data.createTransactions.message,
         });
         navigate('/');
       },

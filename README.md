@@ -27,7 +27,7 @@ Once you've installed all packages, please to create you `.env` file on the root
 For the empty values, this is up to you.
 
 Now, we recommend to use [Docker](https://www.docker.com/products/docker-desktop/) on your machine.
-Then, please to launch the postgres DB by doing
+Then, please to launch the **Postgres DB** and the **Redis cache** by doing
 
 ```sh
 docker compose up -d

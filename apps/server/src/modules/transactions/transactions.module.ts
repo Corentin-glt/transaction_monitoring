@@ -1,3 +1,4 @@
+import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import {
   AlertsDbModule,
@@ -5,6 +6,7 @@ import {
   TransactionsDbModule,
 } from '@transaction-monitoring/db-driver';
 
+import { transcriptionsConsumer } from './transactions.process';
 import {
   TransactionConnectionResolver,
   TransactionsResolver,
@@ -18,6 +20,9 @@ import { ApplyScenarioOnBulkTransactionsRule } from '../../rules/applyScenarioOn
     TransactionsDbModule,
     ScenariosDbModule,
     AlertsDbModule,
+    BullModule.registerQueue({
+      name: 'transactions',
+    }),
   ],
   providers: [
     ApplyScenarioOnBulkTransactionsRule,
@@ -25,6 +30,7 @@ import { ApplyScenarioOnBulkTransactionsRule } from '../../rules/applyScenarioOn
     TransactionsResolver,
     TransactionConnectionResolver,
     TransactionsService,
+    transcriptionsConsumer,
   ],
 })
 export class TransactionsModule {}

@@ -24,7 +24,7 @@ input AlertsConnectionSortingInput {
 }
 
 type BulkInsertTransaction {
-  success: Boolean!
+  message: String!
 }
 
 input CreateRuleInput {

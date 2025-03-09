@@ -71,7 +71,7 @@ export type AlertsConnectionSortingInput = {
 
 export type BulkInsertTransaction = {
   __typename?: 'BulkInsertTransaction';
-  success: Scalars['Boolean']['output'];
+  message: Scalars['String']['output'];
 };
 
 export type CreateRuleInput = {
@@ -103,7 +103,6 @@ export type Mutation = {
   __typename?: 'Mutation';
   createRule: Rule;
   createScenario: Scenario;
-  createTransaction: Transaction;
   createTransactions: BulkInsertTransaction;
   deleteRule: Rule;
   deleteScenario: Scenario;
@@ -118,10 +117,6 @@ export type MutationCreateRuleArgs = {
 
 export type MutationCreateScenarioArgs = {
   input: CreateScenarioInput;
-};
-
-export type MutationCreateTransactionArgs = {
-  input: CreateTransactionInput;
 };
 
 export type MutationCreateTransactionsArgs = {
@@ -826,42 +821,7 @@ export type CreateTransactionsMutation = {
   __typename?: 'Mutation';
   createTransactions: {
     __typename?: 'BulkInsertTransaction';
-    success: boolean;
-  };
-};
-
-export type CreateTransactionMutationVariables = Exact<{
-  input: CreateTransactionInput;
-}>;
-
-export type CreateTransactionMutation = {
-  __typename?: 'Mutation';
-  createTransaction: {
-    __typename?: 'Transaction';
-    id: string;
-    amount: number;
-    currency: any;
-    createdAt: any;
-    externalId: string;
-    metadata?: any | null;
-    sourceAccount: string;
-    targetAccount: string;
-    alerts?: Array<{
-      __typename?: 'Alert';
-      id: string;
-      status: any;
-      createdAt: any;
-      rule: {
-        __typename?: 'Rule';
-        id: string;
-        name: string;
-      };
-      scenario: {
-        __typename?: 'Scenario';
-        id: string;
-        name: string;
-      };
-    }> | null;
+    message: string;
   };
 };
 
@@ -2056,7 +2016,7 @@ export const CreateTransactionsDocument = gql`
     $input: CreateTransactionsInput!
   ) {
     createTransactions(input: $input) {
-      success
+      message
     }
   }
 `;
@@ -2103,58 +2063,4 @@ export type CreateTransactionsMutationOptions =
   Apollo.BaseMutationOptions<
     CreateTransactionsMutation,
     CreateTransactionsMutationVariables
-  >;
-export const CreateTransactionDocument = gql`
-  mutation CreateTransaction(
-    $input: CreateTransactionInput!
-  ) {
-    createTransaction(input: $input) {
-      ...transactionFragment
-    }
-  }
-  ${TransactionFragmentFragmentDoc}
-`;
-export type CreateTransactionMutationFn =
-  Apollo.MutationFunction<
-    CreateTransactionMutation,
-    CreateTransactionMutationVariables
-  >;
-
-/**
- * __useCreateTransactionMutation__
- *
- * To run a mutation, you first call `useCreateTransactionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTransactionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createTransactionMutation, { data, loading, error }] = useCreateTransactionMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateTransactionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateTransactionMutation,
-    CreateTransactionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateTransactionMutation,
-    CreateTransactionMutationVariables
-  >(CreateTransactionDocument, options);
-}
-export type CreateTransactionMutationHookResult =
-  ReturnType<typeof useCreateTransactionMutation>;
-export type CreateTransactionMutationResult =
-  Apollo.MutationResult<CreateTransactionMutation>;
-export type CreateTransactionMutationOptions =
-  Apollo.BaseMutationOptions<
-    CreateTransactionMutation,
-    CreateTransactionMutationVariables
   >;

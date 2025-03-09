@@ -19,7 +19,7 @@ const fields = [
 ];
 
 const operators = [
-  { name: '==', label: '=' },
+  { name: '=', label: '=' },
   { name: '!=', label: '!=' },
   { name: '<', label: '<' },
   { name: '<=', label: '<=' },

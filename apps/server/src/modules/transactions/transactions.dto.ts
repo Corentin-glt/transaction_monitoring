@@ -51,8 +51,8 @@ export class Transaction {
 
 @ObjectType()
 export class BulkInsertTransaction {
-  @Field(() => Boolean)
-  success: boolean;
+  @Field(() => String)
+  message: string;
 }
 @InputType()
 export class CreateTransactionInput {

@@ -1,3 +1,4 @@
+import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import {
   TransactionEntity,
@@ -9,6 +10,7 @@ import {
   Sorting,
   TransactionModel,
 } from '@transaction-monitoring/interface';
+import { Queue } from 'bullmq';
 
 import { ApplyScenarioOnAggregateTransactionsRule } from '../../rules/applyScenarioOnAggregateTransactions.rule';
 import { ApplyScenarioOnBulkTransactionsRule } from '../../rules/applyScenarioOnBulkTransactions.rule';
@@ -47,7 +49,9 @@ export class TransactionsService {
   constructor(
     private readonly transactionsDbService: TransactionsDbService,
     private readonly applyScenariosOnBulkTransactionRules: ApplyScenarioOnBulkTransactionsRule,
-    private readonly applyScenariosOnAggregateTransactionRules: ApplyScenarioOnAggregateTransactionsRule
+    private readonly applyScenariosOnAggregateTransactionRules: ApplyScenarioOnAggregateTransactionsRule,
+    @InjectQueue('transactions')
+    private readonly transactionQueue: Queue
   ) {}
 
   #buildFormat(
@@ -67,30 +71,30 @@ export class TransactionsService {
   }
 
   async createTransaction(params: CreateTransactionParams) {
-    //TODO: create a RULE in order to check the scenarios and their rules
-    // before creating a new transaction. Then attach their alert
+    const transactionsWithAlertIds =
+      await this.applyScenariosOnBulkTransactionRules.ruleApplyScenarioOnBulkTransactions_v1(
+        [params]
+      );
+
     const transaction =
       await this.transactionsDbService.createTransaction(
-        params
+        transactionsWithAlertIds[0]
       );
+
+    await this.applyScenariosOnAggregateTransactionRules.ruleApplyScenarioOnAggregateTransactions_v1();
+
     return this.#buildFormat(transaction);
   }
 
   async bulkInsertTransactions(
     params: CreateTransactionParams[]
-  ): Promise<{ success: true }> {
-    const transactionsWithAlertIds =
-      await this.applyScenariosOnBulkTransactionRules.ruleApplyScenarioOnBulkTransactions_v1(
-        params
-      );
+  ): Promise<{ message: string }> {
+    await this.transactionQueue.add('bulk', params, {
+      attempts: 3,
+      removeOnComplete: true,
+    });
 
-    await this.transactionsDbService.bulkInsertTransactions(
-      transactionsWithAlertIds
-    );
-
-    await this.applyScenariosOnAggregateTransactionRules.ruleApplyScenarioOnAggregateTransactions_v1();
-
-    return { success: true };
+    return { message: 'Transaction processing started' };
   }
 
   async findTransactions(
