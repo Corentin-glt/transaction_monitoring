@@ -107,7 +107,5 @@ export function retrieveOnlyAmountFilter(
     }
   }
 
-  console.log('HEllo 2');
-
   throw new Error('Unsupported jsonLogic rule');
 }

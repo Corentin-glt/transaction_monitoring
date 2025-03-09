@@ -58,7 +58,7 @@ And it's done 🎉.
 
 In this NX monorepository, you will find multiple applications. The **client app** is built with **React**, and the **server app** is powered by **NestJS**.
 
-### Start the Server (NestJS)
+#### Start the Server (NestJS)
 
 To launch the backend server, run the following command:
 
@@ -68,7 +68,7 @@ yarn start:server
 
 This will start the NestJS server in development mode.
 
-### Start the Client (React)
+#### Start the Client (React)
 
 To launch the frontend application, run:
 
@@ -79,3 +79,11 @@ yarn start:client
 This will start the React application in development mode and open it in your default browser.
 
 Make sure all dependencies are installed by running `yarn install` before starting the services.
+
+## Test 🧪
+
+To test the server:
+
+```sh
+yarn test:server
+```
