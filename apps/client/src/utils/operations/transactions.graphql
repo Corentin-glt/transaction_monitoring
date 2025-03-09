@@ -65,3 +65,9 @@ mutation CreateTransactions(
     message
   }
 }
+
+subscription BulkTransactionsSuccess {
+  bulkTransactionsSuccess {
+    message
+  }
+}

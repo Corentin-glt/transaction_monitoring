@@ -23,6 +23,10 @@ input AlertsConnectionSortingInput {
   createdAt: SortingEnum
 }
 
+type AlertsCreatedSuccess {
+  message: String!
+}
+
 type BulkInsertTransaction {
   message: String!
 }
@@ -126,6 +130,11 @@ input ScenariosConnectionSortingInput {
 enum SortingEnum {
   asc
   desc
+}
+
+type Subscription {
+  alertsCreatedSuccess: AlertsCreatedSuccess!
+  bulkTransactionsSuccess: BulkInsertTransaction!
 }
 
 type Transaction {

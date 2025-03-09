@@ -54,3 +54,9 @@ mutation UpdateAlert(
     ...alertFragment
   }
 }
+
+subscription AlertsCreatedSuccess {
+  alertsCreatedSuccess {
+    message
+  }
+}

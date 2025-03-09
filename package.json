@@ -38,6 +38,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^12.4.10",
     "graphql": "16.10.0",
+    "graphql-redis-subscriptions": "^2.7.0",
     "joi": "17.13.3",
     "json-logic-js": "^2.0.5",
     "lodash": "^4.17.21",

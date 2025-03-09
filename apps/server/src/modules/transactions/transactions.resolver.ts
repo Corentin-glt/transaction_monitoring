@@ -1,3 +1,4 @@
+import { Inject } from '@nestjs/common';
 import {
   Args,
   ID,
@@ -6,7 +7,9 @@ import {
   Query,
   ResolveField,
   Resolver,
+  Subscription,
 } from '@nestjs/graphql';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 
 import {
   BulkInsertTransaction,
@@ -18,12 +21,15 @@ import {
   TransactionsConnectionItemsArgs,
 } from './transactions.dto';
 import { TransactionsService } from './transactions.service';
+import { PUB_SUB } from '../../pubsub/pubsub.module';
 import { Alert } from '../alerts/alerts.dto';
 
 @Resolver(() => Transaction)
 export class TransactionsResolver {
   constructor(
-    private readonly transactionsService: TransactionsService
+    private readonly transactionsService: TransactionsService,
+    @Inject(PUB_SUB)
+    private readonly pubSubService: RedisPubSub
   ) {}
 
   @Query(() => Transaction)
@@ -65,6 +71,16 @@ export class TransactionsResolver {
     );
   }
 
+  @Subscription(() => BulkInsertTransaction)
+  bulkTransactionsSuccess() {
+    const a = this.pubSubService.asyncIterator(
+      'bulkTransactionsSuccess'
+    );
+
+    console.log('JE SUIS DANS LE BULK')
+    return a
+  }
+
   @ResolveField('alerts')
   async alerts(
     @Parent() parent: Transaction
@@ -74,6 +90,7 @@ export class TransactionsResolver {
     );
   }
 }
+
 @Resolver(TransactionsConnection)
 export class TransactionConnectionResolver {
   constructor(

@@ -1,7 +1,10 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { Inject } from '@nestjs/common';
 import { TransactionsDbService } from '@transaction-monitoring/db-driver';
 import { Job } from 'bullmq';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 
+import { PUB_SUB } from '../../pubsub/pubsub.module';
 import { ApplyScenarioOnAggregateTransactionsRule } from '../../rules/applyScenarioOnAggregateTransactions.rule';
 import { ApplyScenarioOnBulkTransactionsRule } from '../../rules/applyScenarioOnBulkTransactions.rule';
 
@@ -10,7 +13,9 @@ export class transcriptionsConsumer extends WorkerHost {
   constructor(
     private readonly applyScenariosOnBulkTransactionRules: ApplyScenarioOnBulkTransactionsRule,
     private readonly applyScenariosOnAggregateTransactionRules: ApplyScenarioOnAggregateTransactionsRule,
-    private readonly transactionsDbService: TransactionsDbService
+    private readonly transactionsDbService: TransactionsDbService,
+    @Inject(PUB_SUB)
+    private readonly pubSubService: RedisPubSub
   ) {
     super();
   }
@@ -29,7 +34,22 @@ export class transcriptionsConsumer extends WorkerHost {
           transactionsWithAlertIds
         );
 
+        await this.pubSubService.publish(
+          'bulkTransactionsSuccess',
+          {
+            message:
+              'Bulk transactions has been applied with success',
+          }
+        );
+
         await this.applyScenariosOnAggregateTransactionRules.ruleApplyScenarioOnAggregateTransactions_v1();
+
+        await this.pubSubService.publish(
+          'alertsCreatedSuccess',
+          {
+            message: 'Alerts has been created with success',
+          }
+        );
 
         console.log(
           `Bulk Transaction processed successfully.`

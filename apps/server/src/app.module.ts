@@ -16,12 +16,14 @@ import { AlertsModule } from './modules/alerts/alerts.module';
 import { RulesModule } from './modules/rules/rules.module';
 import { ScenariosModule } from './modules/scenarios/scenarios.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
+import { PubSubModule } from './pubsub/pubsub.module';
 
 const applicationModules = [
   TransactionsModule,
   RulesModule,
   ScenariosModule,
   AlertsModule,
+  PubSubModule,
 ];
 
 @Module({

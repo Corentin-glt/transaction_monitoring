@@ -69,6 +69,11 @@ export type AlertsConnectionSortingInput = {
   createdAt?: InputMaybe<SortingEnum>;
 };
 
+export type AlertsCreatedSuccess = {
+  __typename?: 'AlertsCreatedSuccess';
+  message: Scalars['String']['output'];
+};
+
 export type BulkInsertTransaction = {
   __typename?: 'BulkInsertTransaction';
   message: Scalars['String']['output'];
@@ -103,6 +108,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createRule: Rule;
   createScenario: Scenario;
+  createTransaction: Transaction;
   createTransactions: BulkInsertTransaction;
   deleteRule: Rule;
   deleteScenario: Scenario;
@@ -117,6 +123,10 @@ export type MutationCreateRuleArgs = {
 
 export type MutationCreateScenarioArgs = {
   input: CreateScenarioInput;
+};
+
+export type MutationCreateTransactionArgs = {
+  input: CreateTransactionInput;
 };
 
 export type MutationCreateTransactionsArgs = {
@@ -254,6 +264,12 @@ export enum SortingEnum {
   Asc = 'asc',
   Desc = 'desc',
 }
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  alertsCreatedSuccess: AlertsCreatedSuccess;
+  bulkTransactionsSuccess: BulkInsertTransaction;
+};
 
 export type Transaction = {
   __typename?: 'Transaction';
@@ -432,6 +448,17 @@ export type UpdateAlertMutation = {
       sourceAccount: string;
       targetAccount: string;
     }> | null;
+  };
+};
+
+export type AlertsCreatedSuccessSubscriptionVariables =
+  Exact<{ [key: string]: never }>;
+
+export type AlertsCreatedSuccessSubscription = {
+  __typename?: 'Subscription';
+  alertsCreatedSuccess: {
+    __typename?: 'AlertsCreatedSuccess';
+    message: string;
   };
 };
 
@@ -825,6 +852,17 @@ export type CreateTransactionsMutation = {
   };
 };
 
+export type BulkTransactionsSuccessSubscriptionVariables =
+  Exact<{ [key: string]: never }>;
+
+export type BulkTransactionsSuccessSubscription = {
+  __typename?: 'Subscription';
+  bulkTransactionsSuccess: {
+    __typename?: 'BulkInsertTransaction';
+    message: string;
+  };
+};
+
 export const AlertFragmentFragmentDoc = gql`
   fragment alertFragment on Alert {
     id
@@ -1134,6 +1172,45 @@ export type UpdateAlertMutationOptions =
     UpdateAlertMutation,
     UpdateAlertMutationVariables
   >;
+export const AlertsCreatedSuccessDocument = gql`
+  subscription AlertsCreatedSuccess {
+    alertsCreatedSuccess {
+      message
+    }
+  }
+`;
+
+/**
+ * __useAlertsCreatedSuccessSubscription__
+ *
+ * To run a query within a React component, call `useAlertsCreatedSuccessSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useAlertsCreatedSuccessSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAlertsCreatedSuccessSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAlertsCreatedSuccessSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    AlertsCreatedSuccessSubscription,
+    AlertsCreatedSuccessSubscriptionVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSubscription<
+    AlertsCreatedSuccessSubscription,
+    AlertsCreatedSuccessSubscriptionVariables
+  >(AlertsCreatedSuccessDocument, options);
+}
+export type AlertsCreatedSuccessSubscriptionHookResult =
+  ReturnType<typeof useAlertsCreatedSuccessSubscription>;
+export type AlertsCreatedSuccessSubscriptionResult =
+  Apollo.SubscriptionResult<AlertsCreatedSuccessSubscription>;
 export const RuleDocument = gql`
   query Rule($ruleId: ID!) {
     rule(id: $ruleId) {
@@ -2064,3 +2141,42 @@ export type CreateTransactionsMutationOptions =
     CreateTransactionsMutation,
     CreateTransactionsMutationVariables
   >;
+export const BulkTransactionsSuccessDocument = gql`
+  subscription BulkTransactionsSuccess {
+    bulkTransactionsSuccess {
+      message
+    }
+  }
+`;
+
+/**
+ * __useBulkTransactionsSuccessSubscription__
+ *
+ * To run a query within a React component, call `useBulkTransactionsSuccessSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useBulkTransactionsSuccessSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBulkTransactionsSuccessSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBulkTransactionsSuccessSubscription(
+  baseOptions?: Apollo.SubscriptionHookOptions<
+    BulkTransactionsSuccessSubscription,
+    BulkTransactionsSuccessSubscriptionVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSubscription<
+    BulkTransactionsSuccessSubscription,
+    BulkTransactionsSuccessSubscriptionVariables
+  >(BulkTransactionsSuccessDocument, options);
+}
+export type BulkTransactionsSuccessSubscriptionHookResult =
+  ReturnType<typeof useBulkTransactionsSuccessSubscription>;
+export type BulkTransactionsSuccessSubscriptionResult =
+  Apollo.SubscriptionResult<BulkTransactionsSuccessSubscription>;

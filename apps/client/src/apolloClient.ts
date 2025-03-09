@@ -6,6 +6,7 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import {
   getMainDefinition,
   isReference,
@@ -15,6 +16,7 @@ import {
   GraphQLError,
   GraphQLFormattedError,
 } from 'graphql';
+import { createClient } from 'graphql-ws';
 
 import { toastsVar } from './utils/cache';
 import { ToastIntent } from './utils/providers/toasts/toastProvider';
@@ -22,6 +24,12 @@ import { ToastIntent } from './utils/providers/toasts/toastProvider';
 const httpLink = createHttpLink({
   uri: `${import.meta.env.VITE_SERVER_ENDPOINT}/graphql`,
 });
+
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: `${import.meta.env.VITE_SERVER_WS}/graphql`,
+  })
+);
 
 const createNewErrorMessage = (params: {
   message: string;
@@ -104,7 +112,7 @@ function offsetPagination<T = Reference>(
 }
 
 const client = new ApolloClient({
-  link: from([errorLink, httpLink]),
+  link: from([errorLink, httpLink, wsLink]),
   cache: new InMemoryCache({
     typePolicies: {
       TransactionsConnection: {
@@ -142,7 +150,7 @@ const client = new ApolloClient({
           },
         },
       },
-      
+
       ScenariosConnection: {
         fields: {
           items: {
@@ -160,7 +168,7 @@ const client = new ApolloClient({
           },
         },
       },
-      
+
       AlertsConnection: {
         fields: {
           items: {

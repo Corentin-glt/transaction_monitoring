@@ -41,6 +41,12 @@ export class Alert {
   public createdAt: Date;
 }
 
+@ObjectType()
+export class AlertsCreatedSuccess {
+  @Field(() => String)
+  message: string;
+}
+
 @InputType()
 export class UpdateAlertInput {
   @Field(() => AlertStatusScalar)

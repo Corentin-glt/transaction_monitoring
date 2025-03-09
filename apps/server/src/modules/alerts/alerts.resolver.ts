@@ -1,3 +1,4 @@
+import { Inject } from '@nestjs/common';
 import {
   Args,
   ID,
@@ -6,22 +7,28 @@ import {
   Query,
   ResolveField,
   Resolver,
+  Subscription,
 } from '@nestjs/graphql';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 
 import {
   Alert,
   AlertsConnection,
   AlertsConnectionArgs,
   AlertsConnectionItemsArgs,
+  AlertsCreatedSuccess,
   UpdateAlertInput,
 } from './alerts.dto';
 import { AlertsService } from './alerts.service';
+import { PUB_SUB } from '../../pubsub/pubsub.module';
 import { Transaction } from '../transactions/transactions.dto';
 
 @Resolver(() => Alert)
 export class AlertsResolver {
   constructor(
-    private readonly alertsService: AlertsService
+    private readonly alertsService: AlertsService,
+    @Inject(PUB_SUB)
+    private readonly pubSubService: RedisPubSub
   ) {}
 
   @Query(() => Alert)
@@ -54,6 +61,13 @@ export class AlertsResolver {
   ): Promise<Transaction[]> {
     return this.alertsService.getAlertTransactions(
       parent.id
+    );
+  }
+
+  @Subscription(() => AlertsCreatedSuccess)
+  alertsCreatedSuccess() {
+    return this.pubSubService.asyncIterator(
+      'alertsCreatedSuccess'
     );
   }
 }

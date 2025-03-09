@@ -57,6 +57,9 @@ export class GraphQLModuleConfigService
           },
         ],
       },
+      subscriptions: {
+        'graphql-ws': true,
+      },
     };
   }
 }
