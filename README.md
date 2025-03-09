@@ -17,7 +17,7 @@ Please to install yarn.
 npm install --global yarn
 ```
 
-Since the root directory please to install packages
+From the root directory please to install packages
 
 ```sh
 yarn install
