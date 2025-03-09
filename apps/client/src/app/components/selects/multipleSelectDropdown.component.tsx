@@ -95,7 +95,7 @@ const MultipleSelectDropDownComponent: FunctionComponent<SelectDropDownProps> =
           ref={!disabled ? ref : undefined}
         >
           <div
-            className={`flex items-center justify-between rounded-8 px-4 text-sm gap-x-2  border shadow-sm p-2 ${
+            className={`flex items-center justify-between rounded-md px-4 text-sm gap-x-2  border shadow-sm p-2 ${
               disabled
                 ? 'hover:cursor-not-allowed opacity-70'
                 : 'hover:cursor-pointer'
@@ -124,7 +124,7 @@ const MultipleSelectDropDownComponent: FunctionComponent<SelectDropDownProps> =
           {isComponentVisible && (
             <datalist
               aria-disabled={disabled}
-              className="z-10 absolute bg-white  shadow-sm mt-2 text-sm font-medium  text-slate-700  top-10 w-full flex flex-col items-left overflow-hidden rounded-8  border"
+              className="z-10 absolute bg-white  shadow-sm mt-2 text-sm font-medium  text-slate-700  top-10 w-full flex flex-col items-left overflow-hidden rounded-md  border"
               id={datalistId}
             >
               {loading && (

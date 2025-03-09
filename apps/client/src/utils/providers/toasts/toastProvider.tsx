@@ -56,7 +56,7 @@ const ToastProvider: FunctionComponent<React.PropsWithChildren> =
               </button>
 
               {intent === ToastIntent.ERROR ? (
-                <div className="flex gap-2 bg-red-400 text-red-800 p-4 rounded-6 shadow-md">
+                <div className="flex gap-2 bg-red-400 text-red-800 p-4 rounded-md shadow-md">
                   <ExclamationCircleIcon className="h-6 w-6" />
                   <div className="flex flex-col">
                     <h3 className="font-bold">{title}</h3>
@@ -64,7 +64,7 @@ const ToastProvider: FunctionComponent<React.PropsWithChildren> =
                   </div>
                 </div>
               ) : (
-                <div className="flex gap-2  text-white p-4 rounded-6 shadow-md bg-badoit">
+                <div className="flex gap-2  text-white p-4 rounded-md shadow-md bg-badoit">
                   <CheckBadgeIcon className="h-6 w-6" />
                   <div className="flex flex-col">
                     <h3 className="font-bold">{title}</h3>
