@@ -209,4 +209,10 @@ export class TransactionsDbService {
 
     return transactionAlerts.map((t) => t.alert);
   }
+
+  async aggregateTransaction(
+    params: Prisma.TransactionAggregateArgs
+  ) {
+    return this.prismaService.transaction.aggregate(params);
+  }
 }

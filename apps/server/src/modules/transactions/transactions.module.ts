@@ -10,6 +10,7 @@ import {
   TransactionsResolver,
 } from './transactions.resolver';
 import { TransactionsService } from './transactions.service';
+import { ApplyScenarioOnAggregateTransactionsRule } from '../../rules/applyScenarioOnAggregateTransactions.rule';
 import { ApplyScenarioOnBulkTransactionsRule } from '../../rules/applyScenarioOnBulkTransactions.rule';
 
 @Module({
@@ -20,6 +21,7 @@ import { ApplyScenarioOnBulkTransactionsRule } from '../../rules/applyScenarioOn
   ],
   providers: [
     ApplyScenarioOnBulkTransactionsRule,
+    ApplyScenarioOnAggregateTransactionsRule,
     TransactionsResolver,
     TransactionConnectionResolver,
     TransactionsService,

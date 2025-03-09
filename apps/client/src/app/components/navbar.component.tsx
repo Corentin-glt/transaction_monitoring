@@ -31,6 +31,11 @@ interface Menu {
 const menu: Menu[] = [
   { title: 'Transactions', link: '/', icon: '🏦' },
   {
+    title: 'Alerts',
+    link: '/alerts',
+    icon: '🔔',
+  },
+  {
     title: 'Rules',
     link: '/rules',
     icon: '🏗️',
@@ -39,11 +44,6 @@ const menu: Menu[] = [
     title: 'Scenario',
     link: '/scenarios',
     icon: '📖',
-  },
-  {
-    title: 'Alerts',
-    link: '/alerts',
-    icon: '🔔',
   },
 ];
 

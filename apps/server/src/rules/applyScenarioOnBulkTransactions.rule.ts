@@ -17,11 +17,6 @@ interface BulkTransaction {
   alertIds?: string[];
 }
 
-// interface BulkTransactionAfterApplyScenario
-//   extends BulkTransaction {
-//   alertIds?: string[];
-// }
-
 @Injectable()
 export class ApplyScenarioOnBulkTransactionsRule {
   constructor(
@@ -54,7 +49,6 @@ export class ApplyScenarioOnBulkTransactionsRule {
         const ruleLogic = rule.jsonLogic as any;
 
         if (rule.isAggregate) {
-          // TODO: DO AN OTHER RULE TO DO THAT
           continue;
         }
 

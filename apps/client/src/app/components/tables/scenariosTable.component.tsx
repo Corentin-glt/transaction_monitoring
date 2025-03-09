@@ -58,7 +58,7 @@ const ScenariosTableComponent: FunctionComponent<ScenariosTableComponentProps> =
                     {scenario.rules?.map((r) => (
                       <Badge
                         key={r.id}
-                        color="lime"
+                        color="emerald"
                       >
                         {r.name}
                       </Badge>

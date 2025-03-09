@@ -104,7 +104,7 @@ const MultipleSelectDropDownComponent: FunctionComponent<SelectDropDownProps> =
             {selectedOptions.length > 0 ? (
               <div className="flex gap-x-2">
                 {selectedOptions?.map((o) => (
-                  <Badge color="lime">{o.label}</Badge>
+                  <Badge color="emerald">{o.label}</Badge>
                 ))}
               </div>
             ) : (

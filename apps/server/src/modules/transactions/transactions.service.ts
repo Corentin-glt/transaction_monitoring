@@ -10,6 +10,7 @@ import {
   TransactionModel,
 } from '@transaction-monitoring/interface';
 
+import { ApplyScenarioOnAggregateTransactionsRule } from '../../rules/applyScenarioOnAggregateTransactions.rule';
 import { ApplyScenarioOnBulkTransactionsRule } from '../../rules/applyScenarioOnBulkTransactions.rule';
 
 interface CreateTransactionParams {
@@ -45,7 +46,8 @@ interface SortingOptions {
 export class TransactionsService {
   constructor(
     private readonly transactionsDbService: TransactionsDbService,
-    private readonly applyScenariosOnBulkTransactionRules: ApplyScenarioOnBulkTransactionsRule
+    private readonly applyScenariosOnBulkTransactionRules: ApplyScenarioOnBulkTransactionsRule,
+    private readonly applyScenariosOnAggregateTransactionRules: ApplyScenarioOnAggregateTransactionsRule
   ) {}
 
   #buildFormat(
@@ -77,16 +79,18 @@ export class TransactionsService {
   async bulkInsertTransactions(
     params: CreateTransactionParams[]
   ): Promise<{ success: true }> {
-    //TODO: create a RULE in order to check the scenarios and their rules
-    // before creating a new transaction. Then attach their alert
     const transactionsWithAlertIds =
       await this.applyScenariosOnBulkTransactionRules.ruleApplyScenarioOnBulkTransactions_v1(
         params
       );
 
-    return this.transactionsDbService.bulkInsertTransactions(
+    await this.transactionsDbService.bulkInsertTransactions(
       transactionsWithAlertIds
     );
+
+    await this.applyScenariosOnAggregateTransactionRules.ruleApplyScenarioOnAggregateTransactions_v1();
+
+    return { success: true };
   }
 
   async findTransactions(
