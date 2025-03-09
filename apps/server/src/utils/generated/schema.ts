@@ -68,7 +68,7 @@ export interface AlertsConnectionSortingInput {
 
 export interface BulkInsertTransaction {
   __typename?: 'BulkInsertTransaction';
-  success: Scalars['Boolean']['output'];
+  message: Scalars['String']['output'];
 }
 
 export interface CreateRuleInput {
@@ -100,7 +100,6 @@ export interface Mutation {
   __typename?: 'Mutation';
   createRule: Rule;
   createScenario: Scenario;
-  createTransaction: Transaction;
   createTransactions: BulkInsertTransaction;
   deleteRule: Rule;
   deleteScenario: Scenario;
@@ -115,10 +114,6 @@ export interface MutationCreateRuleArgs {
 
 export interface MutationCreateScenarioArgs {
   input: CreateScenarioInput;
-}
-
-export interface MutationCreateTransactionArgs {
-  input: CreateTransactionInput;
 }
 
 export interface MutationCreateTransactionsArgs {

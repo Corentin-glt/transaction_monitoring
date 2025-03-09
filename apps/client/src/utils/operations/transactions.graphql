@@ -62,14 +62,6 @@ mutation CreateTransactions(
   $input: CreateTransactionsInput!
 ) {
   createTransactions(input: $input) {
-    success
-  }
-}
-
-mutation CreateTransaction(
-  $input: CreateTransactionInput!
-) {
-  createTransaction(input: $input) {
-    ...transactionFragment
+    message
   }
 }
