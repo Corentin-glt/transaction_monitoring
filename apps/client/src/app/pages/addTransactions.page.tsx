@@ -18,7 +18,10 @@ const AddTransactionsPage: FunctionComponent = function () {
         });
         navigate('/');
       },
-      refetchQueries: ['TransactionsConnection']
+      refetchQueries: [
+        'TransactionsConnection',
+        'AlertsConnection',
+      ],
     });
 
   return (
