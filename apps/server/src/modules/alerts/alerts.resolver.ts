@@ -64,7 +64,9 @@ export class AlertsResolver {
     );
   }
 
-  @Subscription(() => AlertsCreatedSuccess)
+  @Subscription(() => AlertsCreatedSuccess, {
+    resolve: (payload) => payload,
+  })
   alertsCreatedSuccess() {
     return this.pubSubService.asyncIterator(
       'alertsCreatedSuccess'

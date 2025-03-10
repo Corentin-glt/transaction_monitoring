@@ -94,7 +94,9 @@ export class TransactionsService {
       removeOnComplete: true,
     });
 
-    return { message: 'Transaction processing started' };
+    return {
+      message: 'Bulk transaction processing has started',
+    };
   }
 
   async findTransactions(

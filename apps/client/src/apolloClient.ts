@@ -4,6 +4,7 @@ import {
   FieldPolicy,
   from,
   InMemoryCache,
+  split,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
@@ -28,7 +29,24 @@ const httpLink = createHttpLink({
 const wsLink = new GraphQLWsLink(
   createClient({
     url: `${import.meta.env.VITE_SERVER_WS}/graphql`,
+    on: {
+      connected: () => console.log('WebSocket connected'),
+      closed: () => console.log('WebSocket disconnected'),
+      error: (err) => console.error('WebSocket error', err),
+    },
   })
+);
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  httpLink
 );
 
 const createNewErrorMessage = (params: {
@@ -51,7 +69,7 @@ const defaultError = (
 ) => {
   return createNewErrorMessage({
     intent: ToastIntent.ERROR,
-    title: 'Face to an error',
+    title: 'Something goes wrong.',
     message: graphQLError.message,
   });
 };
@@ -60,10 +78,6 @@ const errorLink = onError(
   ({ graphQLErrors, networkError, operation }) => {
     if (graphQLErrors) {
       for (const graphQLError of graphQLErrors) {
-        const definition = getMainDefinition(
-          operation.query
-        );
-        if (definition.name?.value === 'Me') continue;
         defaultError(graphQLError);
       }
     }
@@ -71,8 +85,8 @@ const errorLink = onError(
     if (networkError) {
       createNewErrorMessage({
         intent: ToastIntent.ERROR,
-        title: 'We lose connection',
-        message: 'Please to try again later.',
+        title: 'Connection lost.',
+        message: 'Please check your internet settings.',
       });
     }
   }
@@ -112,7 +126,7 @@ function offsetPagination<T = Reference>(
 }
 
 const client = new ApolloClient({
-  link: from([errorLink, httpLink, wsLink]),
+  link: from([errorLink, splitLink]),
   cache: new InMemoryCache({
     typePolicies: {
       TransactionsConnection: {

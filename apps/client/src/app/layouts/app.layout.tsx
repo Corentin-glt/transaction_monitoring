@@ -2,7 +2,7 @@ import {
   Sidebar,
   StackedLayout,
 } from '@transaction-monitoring/client-components';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import { useOutlet } from 'react-router-dom';
 
 import {
@@ -13,28 +13,31 @@ import { ToastIntent } from '../../utils/providers/toasts/toastProvider';
 import { useToast } from '../../utils/providers/toasts/toastService';
 import NavbarComponent from '../components/navbar.component';
 
-const AppLayout: FunctionComponent = function ({}) {
+const AppLayout: FunctionComponent = function () {
   const toast = useToast();
-  const { data } = useBulkTransactionsSuccessSubscription({
-    onComplete() {
-      toast.open({
-        intent: ToastIntent.SUCCESS,
-        title: data?.bulkTransactionsSuccess.message,
-      });
-    },
-  });
+  const { data } = useBulkTransactionsSuccessSubscription();
 
   const { data: alertSubscriptionData } =
-    useAlertsCreatedSuccessSubscription({
-      onComplete() {
-        toast.open({
-          intent: ToastIntent.SUCCESS,
-          title:
-            alertSubscriptionData?.alertsCreatedSuccess
-              .message,
-        });
-      },
-    });
+    useAlertsCreatedSuccessSubscription();
+
+  useEffect(() => {
+    if (data) {
+      toast.open({
+        intent: ToastIntent.SUCCESS,
+        title: data.bulkTransactionsSuccess.message,
+      });
+    }
+
+    if (alertSubscriptionData) {
+      toast.open({
+        intent: ToastIntent.SUCCESS,
+        title:
+          alertSubscriptionData.alertsCreatedSuccess
+            .message,
+      });
+    }
+  }, [data, alertSubscriptionData]);
+
   const outlet = useOutlet();
   return (
     <StackedLayout

@@ -71,14 +71,13 @@ export class TransactionsResolver {
     );
   }
 
-  @Subscription(() => BulkInsertTransaction)
+  @Subscription(() => BulkInsertTransaction, {
+    resolve: (payload) => payload,
+  })
   bulkTransactionsSuccess() {
-    const a = this.pubSubService.asyncIterator(
+    return this.pubSubService.asyncIterator(
       'bulkTransactionsSuccess'
     );
-
-    console.log('JE SUIS DANS LE BULK')
-    return a
   }
 
   @ResolveField('alerts')

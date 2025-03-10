@@ -13,7 +13,7 @@ const AddTransactionsPage: FunctionComponent = function () {
     useCreateTransactionsMutation({
       onCompleted(data) {
         toast.open({
-          intent: ToastIntent.SUCCESS,
+          intent: ToastIntent.LOADING,
           title: data.createTransactions.message,
         });
         navigate('/');

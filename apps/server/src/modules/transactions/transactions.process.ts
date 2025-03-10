@@ -55,7 +55,7 @@ export class transcriptionsConsumer extends WorkerHost {
           `Bulk Transaction processed successfully.`
         );
 
-        return {};
+        return;
       }
     }
   }
