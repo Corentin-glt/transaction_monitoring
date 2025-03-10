@@ -24,16 +24,14 @@ const AppLayout: FunctionComponent = function () {
     if (data) {
       toast.open({
         intent: ToastIntent.SUCCESS,
-        title: data.bulkTransactionsSuccess.message,
+        title: `${data.bulkTransactionsSuccess.message}\nPlease to refresh the transactions page`,
       });
     }
 
     if (alertSubscriptionData) {
       toast.open({
         intent: ToastIntent.SUCCESS,
-        title:
-          alertSubscriptionData.alertsCreatedSuccess
-            .message,
+        title: `${alertSubscriptionData.alertsCreatedSuccess.message}\nPlease to refresh the alerts page`,
       });
     }
   }, [data, alertSubscriptionData]);
